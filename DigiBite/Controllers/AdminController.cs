@@ -2,24 +2,14 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
-using System.Net;
 
 namespace DigiBite_Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdminController : ControllerBase
+    public class AdminController(RoleManager<IdentityRole> roleManager) : ControllerBase
     {
 
-        private readonly RoleManager<IdentityRole> roleManager;
-
-        public AdminController(RoleManager<IdentityRole> roleManager
-          )
-        {
-            this.roleManager = roleManager;
-
-        }
 
         #region Role Management
 
@@ -50,11 +40,12 @@ namespace DigiBite_Api.Controllers
             try
             {
                 var role = await roleManager.FindByIdAsync(id);
-                if (role is null)
-                {
-                    throw new Exception($"Role with id : {id} is  Not Found");
+                //if (role is null)
+                //{
+                //    //throw new Exception($"Role with id : {id} is  Not Found");
+                //    throw new Exception();
 
-                }
+                //}
                 return Ok(new ApiResponse<IdentityRole>(role));
             }
             catch (Exception ex)

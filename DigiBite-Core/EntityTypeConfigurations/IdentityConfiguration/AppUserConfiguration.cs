@@ -1,4 +1,5 @@
-﻿using DigiBite_Core.Models.Entities;
+﻿using DigiBite_Core.Entities.Lookups;
+using DigiBite_Core.Models.Entities;
 using DigiBite_Core.Models.Lookups;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -10,7 +11,7 @@ namespace DigiBite_Core.EntityTypeConfigurations.IdentityConfiguration
     {
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
-            builder.ToTable("Users", "Security");
+           
 
             //Foreign key 
             builder.HasMany<Address>().WithOne().HasForeignKey(x => x.UserId);
@@ -35,6 +36,7 @@ namespace DigiBite_Core.EntityTypeConfigurations.IdentityConfiguration
             builder.Property(x => x.ProfileImgId).IsRequired(false);
             builder.Property(x => x.LastName).IsRequired(false);
             builder.Property(x => x.BanReason).IsRequired(false);
+            builder.Property(x => x.EmployeeInformationId).IsRequired(false);
 
             builder.Property(x => x.Email).IsRequired(true);
             builder.Property(x => x.PasswordHash).IsRequired(true);

@@ -9,7 +9,7 @@ namespace DigiBite_Core.EntityTypeConfigurations.IdentityConfiguration
     {
         public void Configure(EntityTypeBuilder<IdentityRole> builder)
         {
-            builder.ToTable("Roles", "Security");
+           
 
             builder.HasData(
                 new IdentityRole

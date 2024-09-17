@@ -34,6 +34,8 @@
             New = 301,
             Confirmed,
             Cancelled,
+            Ready,
+            Served,
             Delivered
         }
 
@@ -69,6 +71,18 @@
             Free = 801,
             Paid
         }
+
+        public enum FileType
+        {
+            Jpg = 901,
+            Png,
+            Gif,
+            jpeg,
+            Svg,
+            Pdf
+        }
+
+
 
     }
 }

@@ -1,4 +1,4 @@
-﻿using DigiBite_Core.Entities.SharedEntity;
+﻿using DigiBite_Core.Entities.Lookups;
 using DigiBite_Core.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

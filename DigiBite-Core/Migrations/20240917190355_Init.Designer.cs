@@ -12,18 +12,198 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigiBite_Core.Migrations
 {
     [DbContext(typeof(DigiBiteContext))]
-    [Migration("20240911135058_First")]
-    partial class First
+    [Migration("20240917190355_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.20")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("DigiBite_Core.Entities.Lookups.EmployeeDocument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationDateTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2024, 9, 17, 22, 3, 52, 161, DateTimeKind.Local).AddTicks(3742));
+
+                    b.Property<string>("DocumentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DocumentNote")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DocumentNumber")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("DocumentPath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EmployeeInformationId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DocumentNumber")
+                        .IsUnique()
+                        .HasFilter("[DocumentNumber] IS NOT NULL");
+
+                    b.HasIndex("EmployeeInformationId");
+
+                    b.ToTable("EmployeeDocuments");
+                });
+
+            modelBuilder.Entity("DigiBite_Core.Entities.Lookups.EmployeeInformation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BankName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationDateTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2024, 9, 17, 22, 3, 52, 161, DateTimeKind.Local).AddTicks(9521));
+
+                    b.Property<DateTime>("DateOfJoining")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EmergencyPhone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IBAN")
+                        .HasMaxLength(34)
+                        .HasColumnType("nvarchar(34)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("JobTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nationality")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("Salary")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IBAN")
+                        .IsUnique()
+                        .HasFilter("[IBAN] IS NOT NULL");
+
+                    b.ToTable("EmployeeInformation");
+                });
+
+            modelBuilder.Entity("DigiBite_Core.Entities.Lookups.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AltText")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasDefaultValue("FoodPhoto");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("FileType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Height")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsPrimary")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int?>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MealId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UploadedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UploadedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Width")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImageUrl")
+                        .IsUnique();
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("MealId");
+
+                    b.ToTable("Images");
+                });
 
             modelBuilder.Entity("DigiBite_Core.Entities.ManyToMany.CartItem", b =>
                 {
@@ -56,48 +236,6 @@ namespace DigiBite_Core.Migrations
                         });
                 });
 
-            modelBuilder.Entity("DigiBite_Core.Entities.SharedEntity.Image", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AltText")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
-                        .HasDefaultValue("FoodPhoto");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsPrimary")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<int?>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MealId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ImageUrl")
-                        .IsUnique();
-
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("MealId");
-
-                    b.ToTable("Images");
-                });
-
             modelBuilder.Entity("DigiBite_Core.Models.Entities.AppUser", b =>
                 {
                     b.Property<string>("Id")
@@ -119,7 +257,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("CreationDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 11, 16, 50, 57, 579, DateTimeKind.Local).AddTicks(2949));
+                        .HasDefaultValue(new DateTime(2024, 9, 17, 22, 3, 52, 113, DateTimeKind.Local).AddTicks(8241));
 
                     b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
@@ -131,6 +269,9 @@ namespace DigiBite_Core.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("EmployeeInformationId")
+                        .HasColumnType("int");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -155,7 +296,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("LastModifiedDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 11, 16, 50, 57, 579, DateTimeKind.Local).AddTicks(3535));
+                        .HasDefaultValue(new DateTime(2024, 9, 17, 22, 3, 52, 113, DateTimeKind.Local).AddTicks(9390));
 
                     b.Property<string>("LastName")
                         .HasMaxLength(20)
@@ -204,6 +345,10 @@ namespace DigiBite_Core.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
+                    b.HasIndex("EmployeeInformationId")
+                        .IsUnique()
+                        .HasFilter("[EmployeeInformationId] IS NOT NULL");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -219,7 +364,7 @@ namespace DigiBite_Core.Migrations
                         .IsUnique()
                         .HasFilter("[ProfileImgId] IS NOT NULL");
 
-                    b.ToTable("Users", "Security", t =>
+                    b.ToTable("AspNetUsers", null, t =>
                         {
                             t.HasCheckConstraint("CH_User_FirstName", "FirstName NOT LIKE '%[^a-zA-Z ]%' AND LEN(FirstName) > 2");
 
@@ -300,7 +445,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("CreationDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 11, 16, 50, 57, 606, DateTimeKind.Local).AddTicks(1291));
+                        .HasDefaultValue(new DateTime(2024, 9, 17, 22, 3, 52, 162, DateTimeKind.Local).AddTicks(7819));
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -353,7 +498,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("CreationDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 11, 16, 50, 57, 606, DateTimeKind.Local).AddTicks(4438));
+                        .HasDefaultValue(new DateTime(2024, 9, 17, 22, 3, 52, 163, DateTimeKind.Local).AddTicks(5137));
 
                     b.Property<int?>("ImageId")
                         .HasColumnType("int");
@@ -408,7 +553,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("CreationDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 11, 16, 50, 57, 606, DateTimeKind.Local).AddTicks(6888));
+                        .HasDefaultValue(new DateTime(2024, 9, 17, 22, 3, 52, 163, DateTimeKind.Local).AddTicks(9185));
 
                     b.Property<string>("Description")
                         .HasMaxLength(500)
@@ -464,7 +609,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("CreationDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 11, 16, 50, 57, 606, DateTimeKind.Local).AddTicks(8967));
+                        .HasDefaultValue(new DateTime(2024, 9, 17, 22, 3, 52, 164, DateTimeKind.Local).AddTicks(5117));
 
                     b.Property<string>("Description")
                         .HasMaxLength(500)
@@ -519,7 +664,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("CreationDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 11, 16, 50, 57, 607, DateTimeKind.Local).AddTicks(6889));
+                        .HasDefaultValue(new DateTime(2024, 9, 17, 22, 3, 52, 164, DateTimeKind.Local).AddTicks(8909));
 
                     b.Property<string>("CustomerNotes")
                         .HasMaxLength(300)
@@ -646,7 +791,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("CreationDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 11, 16, 50, 57, 605, DateTimeKind.Local).AddTicks(8389));
+                        .HasDefaultValue(new DateTime(2024, 9, 17, 22, 3, 52, 162, DateTimeKind.Local).AddTicks(4040));
 
                     b.Property<decimal>("DiscountAmount")
                         .HasColumnType("decimal(18,2)");
@@ -677,7 +822,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("ScheduleStartDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 9, 11, 16, 51, 17, 595, DateTimeKind.Local).AddTicks(7060));
+                        .HasDefaultValue(new DateTime(2024, 9, 17, 22, 4, 12, 135, DateTimeKind.Local).AddTicks(6559));
 
                     b.HasKey("Id");
 
@@ -787,48 +932,48 @@ namespace DigiBite_Core.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("Roles", "Security");
+                    b.ToTable("AspNetRoles", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = "cf3007d4-4e3d-4856-83bd-4b92aa79ce0e",
+                            Id = "9bf9ea32-2843-434b-b628-93233b84becd",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "8931c07f-8de6-47dd-9599-c856c3437f79",
+                            Id = "9f1f0964-49a7-445a-9d84-63d400f40e77",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "9ab5b0a1-5feb-4a93-bdb9-d06c8b26b90d",
+                            Id = "411ba147-a4e5-4325-9e25-99d18f6d5c13",
                             Name = "Waiter",
                             NormalizedName = "WAITER"
                         },
                         new
                         {
-                            Id = "e90a3565-b096-469c-b320-dc383d619abf",
+                            Id = "2ccdc996-6dc9-4d82-8b7d-48b2adc0fb06",
                             Name = "Chef",
                             NormalizedName = "CHEF"
                         },
                         new
                         {
-                            Id = "b9457ca1-ac7c-48a1-a107-472f365f065b",
+                            Id = "48bdf511-1df9-408e-a714-1fab42c6359a",
                             Name = "Cashier",
                             NormalizedName = "CASHIER"
                         },
                         new
                         {
-                            Id = "ce35ac28-ed12-40f2-b964-3c0736d4c3c9",
+                            Id = "bffc9512-0cbe-4cd4-ac14-520646162408",
                             Name = "Delivery",
                             NormalizedName = "DELIVERY"
                         },
                         new
                         {
-                            Id = "adb57878-ba69-48a3-8e7d-c2b80ffd2075",
+                            Id = "27853cd6-c826-4654-acc0-baba99c70d9d",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -856,7 +1001,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RoleClaims", "Security");
+                    b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -881,7 +1026,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserClaims", "Security");
+                    b.ToTable("AspNetUserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -903,7 +1048,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserLogins", "Security");
+                    b.ToTable("AspNetUserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -918,7 +1063,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UserRoles", "Security");
+                    b.ToTable("AspNetUserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -937,7 +1082,27 @@ namespace DigiBite_Core.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("UserTokens", "Security");
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("DigiBite_Core.Entities.Lookups.EmployeeDocument", b =>
+                {
+                    b.HasOne("DigiBite_Core.Entities.Lookups.EmployeeInformation", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeeInformationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DigiBite_Core.Entities.Lookups.Image", b =>
+                {
+                    b.HasOne("DigiBite_Core.Models.Entities.Item", null)
+                        .WithMany()
+                        .HasForeignKey("ItemId");
+
+                    b.HasOne("DigiBite_Core.Models.Entities.Meal", null)
+                        .WithMany()
+                        .HasForeignKey("MealId");
                 });
 
             modelBuilder.Entity("DigiBite_Core.Entities.ManyToMany.CartItem", b =>
@@ -961,20 +1126,13 @@ namespace DigiBite_Core.Migrations
                         .HasForeignKey("MealId");
                 });
 
-            modelBuilder.Entity("DigiBite_Core.Entities.SharedEntity.Image", b =>
-                {
-                    b.HasOne("DigiBite_Core.Models.Entities.Item", null)
-                        .WithMany()
-                        .HasForeignKey("ItemId");
-
-                    b.HasOne("DigiBite_Core.Models.Entities.Meal", null)
-                        .WithMany()
-                        .HasForeignKey("MealId");
-                });
-
             modelBuilder.Entity("DigiBite_Core.Models.Entities.AppUser", b =>
                 {
-                    b.HasOne("DigiBite_Core.Entities.SharedEntity.Image", null)
+                    b.HasOne("DigiBite_Core.Entities.Lookups.EmployeeInformation", null)
+                        .WithOne()
+                        .HasForeignKey("DigiBite_Core.Models.Entities.AppUser", "EmployeeInformationId");
+
+                    b.HasOne("DigiBite_Core.Entities.Lookups.Image", null)
                         .WithOne()
                         .HasForeignKey("DigiBite_Core.Models.Entities.AppUser", "ProfileImgId");
                 });
@@ -996,7 +1154,7 @@ namespace DigiBite_Core.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DigiBite_Core.Entities.SharedEntity.Image", null)
+                    b.HasOne("DigiBite_Core.Entities.Lookups.Image", null)
                         .WithOne()
                         .HasForeignKey("DigiBite_Core.Models.Entities.Category", "ImageId");
                 });
@@ -1009,7 +1167,7 @@ namespace DigiBite_Core.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DigiBite_Core.Entities.SharedEntity.Image", null)
+                    b.HasOne("DigiBite_Core.Entities.Lookups.Image", null)
                         .WithOne()
                         .HasForeignKey("DigiBite_Core.Models.Entities.Ingredient", "ImageId");
                 });

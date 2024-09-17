@@ -19,6 +19,8 @@ namespace DigiBite_Core.Models.Entities
 
         //Relationships
         public int? ProfileImgId { get; set; }
+        public int? EmployeeInformationId { get; set; }
+        
 
     }
 }

@@ -1,6 +1,5 @@
-﻿using DigiBite_Core.Entities.ManyToMany;
-using DigiBite_Core.Entities.SharedEntity;
-using DigiBite_Core.EntityTypeConfigurations;
+﻿using DigiBite_Core.Entities.Lookups;
+using DigiBite_Core.Entities.ManyToMany;
 using DigiBite_Core.EntityTypeConfigurations.EntityConfiguration;
 using DigiBite_Core.EntityTypeConfigurations.IdentityConfiguration;
 using DigiBite_Core.EntityTypeConfigurations.LookupConfiguration;
@@ -26,12 +25,8 @@ namespace DigiBite_Core.Context
             base.OnModelCreating(builder);
             // Identity Configuration
             builder.ApplyConfiguration(new AppUserConfiguration());
-            builder.ApplyConfiguration(new IdentityRoleClaimConfiguration());
             builder.ApplyConfiguration(new IdentityRoleConfiguration());
-            builder.ApplyConfiguration(new IdentityUserClaimConfiguration());
-            builder.ApplyConfiguration(new IdentityUserLoginConfiguration());
-            builder.ApplyConfiguration(new IdentityUserRoleConfiguration());
-            builder.ApplyConfiguration(new IdentityUserTokenConfiguration());
+ 
 
             //BasicEntity Configuration 
             builder.ApplyConfiguration(new CartConfiguration());
@@ -45,8 +40,10 @@ namespace DigiBite_Core.Context
             builder.ApplyConfiguration(new AddressConfiguration());
             builder.ApplyConfiguration(new ImageConfiguration());
             builder.ApplyConfiguration(new VoucherConfiguration());
+            builder.ApplyConfiguration(new EmployeeInformationConfiguration());
+            builder.ApplyConfiguration(new EmployeeDocumentConfiguration());
 
-            //Entity Configuration
+            //Many-Many Configuration
             builder.ApplyConfiguration(new CartItemConfiguration());
             builder.ApplyConfiguration(new ItemIngredientConfiguration());
             builder.ApplyConfiguration(new ItemMealConfiguration());
@@ -63,7 +60,8 @@ namespace DigiBite_Core.Context
             {
                 var configurationType = typeof(ParentConfiguration<>).MakeGenericType(type);
                 var configurationInstance = Activator.CreateInstance(configurationType);
-                builder.ApplyConfiguration((dynamic)configurationInstance);
+                if (configurationInstance != null)
+                    builder.ApplyConfiguration((dynamic)configurationInstance);
             }
 
         }
@@ -81,6 +79,8 @@ namespace DigiBite_Core.Context
         public DbSet<ItemIngredient> ItemIngredients { get; set; }
         public DbSet<ItemMeal> ItemMeals { get; set; }
         public DbSet<VoucherUser> VoucherUsers { get; set; }
+        public DbSet<EmployeeInformation> EmployeeInformation { get; set; }
+        public DbSet<EmployeeDocument> EmployeeDocuments { get; set; }
 
     }
 }
