@@ -1,4 +1,5 @@
 ﻿using DigiBite_Core.Helpers;
+using DigiBite_Core.IRepos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,20 +8,19 @@ namespace DigiBite_Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdminController(RoleManager<IdentityRole> roleManager) : ControllerBase
+    public class AdminController(RoleManager<IdentityRole> roleManager , IQueryRepos repos) : ControllerBase
     {
 
 
         #region Role Management
 
-
         [HttpGet]
         [Route("Role")]
-        public async Task<IActionResult> GetRoles()
+        public async Task<IActionResult> GetRoles3()
         {
             try
             {
-                var roles = await roleManager.Roles.ToListAsync();
+                var roles = await roleManager.Roles.Where(x=>x.Name.Contains("C")).ToListAsync();
                 if (roles is null)
                 {
                     throw new Exception($"No Roles Found");
@@ -32,6 +32,31 @@ namespace DigiBite_Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+        /// <summary>
+        /// to be deleted
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetRolesExp")]
+        public async Task<IActionResult> GetRolesExp()
+        {
+            try
+            {
+                var roles = await repos.GetById<IdentityRole>(x=>x.Name == "5");
+                if (roles is null)
+                {
+                    throw new Exception($"No Roles Found");
+                }
+                return Ok(roles);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [HttpGet]
         [Route("Role/{id}")]

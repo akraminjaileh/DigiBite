@@ -1,3 +1,4 @@
+using DigiBite_Api.Configurations;
 using DigiBite_Core.Context;
 using DigiBite_Core.Filters;
 using DigiBite_Core.Models.Entities;
@@ -14,11 +15,14 @@ builder.Services.AddControllers(op =>
 {
     op.Filters.Add<ResponseFilter>();
 });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<AdminRepos>();
+//Add Scoped
+builder.Services.AddMultiScoped();
+
 //DbContext Config
 builder.Services.AddDbContext<DigiBiteContext>(op =>
 op.UseSqlServer(builder.Configuration.GetConnectionString("Local")));

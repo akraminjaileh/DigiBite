@@ -19,7 +19,7 @@
         public ApiResponse() { }
         public ApiResponse(string message) : base(message) { }
         public ApiResponse(T data) : base(data) { }
-        public ApiResponse(List<T> data) : base(data) { }
+        public ApiResponse(IEnumerable<T> data) : base(data) { }
 
     }
 }
