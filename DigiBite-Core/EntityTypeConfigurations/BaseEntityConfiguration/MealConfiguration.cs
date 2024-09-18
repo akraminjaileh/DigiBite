@@ -12,10 +12,13 @@ namespace DigiBite_Core.EntityTypeConfigurations.EntityConfiguration
             //Nullable(is Not Null By Default) and Default value Config
             builder.Property(x => x.IsAvailable).HasDefaultValue(true);
             builder.Property(x => x.Description).IsRequired(false);
+            builder.Property(x => x.DescriptionEn).IsRequired(false);
 
             //String Max Length
             builder.Property(x => x.Name).HasMaxLength(50);
+            builder.Property(x => x.NameEn).HasMaxLength(50);
             builder.Property(x => x.Description).HasMaxLength(500);
+            builder.Property(x => x.DescriptionEn).HasMaxLength(500);
 
         }
     }

@@ -3,7 +3,7 @@
 namespace DigiBite_Core.Entities.Lookups
 {
     //TODO convert to Media 
-    public class Image
+    public class File
     {
         public int Id { get; set; }
         public string FileName { get; set; }
@@ -13,8 +13,8 @@ namespace DigiBite_Core.Entities.Lookups
         public DateTime UploadedOn { get; set; }
         public string UploadedBy { get; set; }
         public FileType FileType { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
+        public int? Width { get; set; }
+        public int? Height { get; set; }
         public bool IsPrimary { get; set; }
 
         //Relationships

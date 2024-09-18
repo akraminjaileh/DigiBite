@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DigiBite_Core.EntityTypeConfigurations.LookupConfiguration
 {
-    public class ImageConfiguration : IEntityTypeConfiguration<Image>
+    public class FileConfiguration : IEntityTypeConfiguration<Entities.Lookups.File>
     {
-        public void Configure(EntityTypeBuilder<Image> builder)
+        public void Configure(EntityTypeBuilder<Entities.Lookups.File> builder)
         {
             //Primary Key
             builder.HasKey(x => x.Id);
@@ -25,6 +25,8 @@ namespace DigiBite_Core.EntityTypeConfigurations.LookupConfiguration
             //Nullable(is Not Null By Default) and Default value Config
             builder.Property(x => x.AltText).HasDefaultValue("FoodPhoto");
             builder.Property(x => x.IsPrimary).HasDefaultValue(false);
+            builder.Property(x => x.Width).IsRequired(false);
+            builder.Property(x => x.Height).IsRequired(false);
             builder.Property(x => x.ItemId).IsRequired(false);
             builder.Property(x => x.MealId).IsRequired(false);
 

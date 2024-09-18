@@ -1,5 +1,7 @@
 ﻿using DigiBite_Core.IRepos;
+using DigiBite_Core.IServices;
 using DigiBite_Infra.Repos;
+using DigiBite_Infra.Services;
 
 namespace DigiBite_Api.Configurations
 {
@@ -9,6 +11,10 @@ namespace DigiBite_Api.Configurations
         {
             services.AddScoped<IQueryRepos, QueryRepos>();
             services.AddScoped<ICommandRepos, CommandRepos>();
+
+            services.AddScoped<IItemRepos, ItemRepos>();
+            services.AddScoped<IItemService, ItemService>();
+            
         }
     }
 }

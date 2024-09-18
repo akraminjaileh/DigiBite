@@ -11,12 +11,13 @@ namespace DigiBite_Core.EntityTypeConfigurations.EntityConfiguration
         {
 
             //Foreign key 
-            builder.HasOne<Image>().WithOne().HasForeignKey<Category>(x => x.ImageId);
+            builder.HasOne<Entities.Lookups.File>().WithOne().HasForeignKey<Category>(x => x.ImageId);
 
 
             //Nullable(is Not Null By Default) and Default value Config
             builder.Property(x => x.ImageId).IsRequired(false);
             builder.Property(x => x.Description).IsRequired(false);
+            builder.Property(x => x.DescriptionEn).IsRequired(false);
 
 
             //Check Constraint

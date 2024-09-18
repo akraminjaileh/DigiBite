@@ -12,7 +12,7 @@ namespace DigiBite_Core.EntityTypeConfigurations.EntityConfiguration
         {
 
             //Foreign key 
-            builder.HasOne<Image>().WithOne().HasForeignKey<Ingredient>(x => x.ImageId);
+            builder.HasOne<Entities.Lookups.File>().WithOne().HasForeignKey<Ingredient>(x => x.ImageId);
 
 
             //Nullable(is Not Null By Default) and Default value Config
@@ -22,6 +22,7 @@ namespace DigiBite_Core.EntityTypeConfigurations.EntityConfiguration
 
             //String Max Length
             builder.Property(x => x.Name).HasMaxLength(50);
+            builder.Property(x => x.NameEn).HasMaxLength(50);
 
         }
     }
