@@ -8,9 +8,9 @@ namespace DigiBite_Infra.Services
 {
     public class ItemService(IItemRepos repos, IQueryRepos query) : IItemService
     {
-        public async Task<IEnumerable<ItemDTO>> GetItems()
+        public async Task<IEnumerable<ItemDTO>> GetItems(int skip, int take)
         {
-            var items = await query.GetAll<Item, Category, int, ItemDTO>(
+            var items = await query.GetProjected<Item, Category, int, ItemDTO>(
                 i => i.CategoryId,
                 c => c.Id,
                 (i, c) =>
@@ -22,7 +22,7 @@ namespace DigiBite_Infra.Services
                     CategoryName = c.Name,
 
                 }
-            ).Take(8).ToListAsync();
+            ).Skip(skip == 0 ? 0 : skip).Take(take == 0 ? 5 : take).AsNoTracking().ToListAsync();
             return items;
 
         }

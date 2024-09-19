@@ -4,6 +4,6 @@ namespace DigiBite_Core.IServices
 {
     public interface IItemService
     {
-        Task<IEnumerable<ItemDTO>> GetItems();
+        Task<IEnumerable<ItemDTO>> GetItems(int skip, int take);
     }
 }
