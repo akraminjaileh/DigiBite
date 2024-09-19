@@ -42,12 +42,15 @@ namespace DigiBite_Core.Context
             builder.ApplyConfiguration(new VoucherConfiguration());
             builder.ApplyConfiguration(new EmployeeInformationConfiguration());
             builder.ApplyConfiguration(new EmployeeDocumentConfiguration());
+            builder.ApplyConfiguration(new AddOnConfiguration());
+            builder.ApplyConfiguration(new AddOnContainerConfiguration());
 
             //Many-Many Configuration
             builder.ApplyConfiguration(new CartItemConfiguration());
             builder.ApplyConfiguration(new ItemIngredientConfiguration());
             builder.ApplyConfiguration(new ItemMealConfiguration());
             builder.ApplyConfiguration(new VoucherUserConfiguration());
+            builder.ApplyConfiguration(new AddOnItemMealConfiguration());
 
             // Apply ParentConfiguration to all entities that inherit from Parent
             var parentType = typeof(Parent);
@@ -81,6 +84,9 @@ namespace DigiBite_Core.Context
         public DbSet<VoucherUser> VoucherUsers { get; set; }
         public DbSet<EmployeeInformation> EmployeeInformation { get; set; }
         public DbSet<EmployeeDocument> EmployeeDocuments { get; set; }
+        public DbSet<AddOnContainer> AddOnContainers { get; set; }
+        public DbSet<AddOn> AddOns { get; set; }
+        public DbSet<AddOnItemMeal> AddOnItemMeals { get; set; }
 
     }
 }

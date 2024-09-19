@@ -27,5 +27,7 @@ namespace DigiBite_Core.EntityTypeConfigurations.ManyToManyConfiguration
             x.HasCheckConstraint("CH_CartItem_QTY", "QTY > 0"));
 
         }
+
+
     }
 }

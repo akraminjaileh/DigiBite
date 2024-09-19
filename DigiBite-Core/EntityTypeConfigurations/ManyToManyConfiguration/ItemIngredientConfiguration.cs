@@ -2,7 +2,6 @@
 using DigiBite_Core.Models.ManyToMany;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using static DigiBite_Core.Enums.DigiBiteEnums;
 
 namespace DigiBite_Core.EntityTypeConfigurations.ManyToManyConfiguration
 {
@@ -17,10 +16,6 @@ namespace DigiBite_Core.EntityTypeConfigurations.ManyToManyConfiguration
             //Foreign key 
             builder.HasOne<Item>().WithMany().HasForeignKey(x => x.ItemId).OnDelete(DeleteBehavior.NoAction);
             builder.HasOne<Ingredient>().WithMany().HasForeignKey(x => x.IngredientId).OnDelete(DeleteBehavior.NoAction);
-
-            //Nullable(is Not Null By Default) and Default value Config
-            builder.Property(x => x.IngredientType).HasDefaultValue(IngredientType.Free);
-            builder.Property(x => x.Price).HasDefaultValue(0);
 
 
             //Check Constraint

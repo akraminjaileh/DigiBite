@@ -66,7 +66,7 @@
             Pieces
         }
 
-        public enum IngredientType
+        public enum AddOnType
         {
             Free = 801,
             Paid

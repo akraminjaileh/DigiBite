@@ -28,7 +28,7 @@ namespace DigiBite_Core.EntityTypeConfigurations.EntityConfiguration
 
 
             //String Max Length
-            builder.Property(x => x.SpecialNotes).HasMaxLength(300);
+            builder.Property(x => x.SpecialNotes).HasMaxLength(256);
 
         }
     }
