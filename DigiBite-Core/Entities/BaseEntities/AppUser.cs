@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using static DigiBite_Core.Enums.DigiBiteEnums;
+﻿using DigiBite_Core.Enums;
+using Microsoft.AspNetCore.Identity;
 
 namespace DigiBite_Core.Models.Entities
 {
@@ -20,7 +20,7 @@ namespace DigiBite_Core.Models.Entities
         //Relationships
         public int? ProfileImgId { get; set; }
         public int? EmployeeInformationId { get; set; }
-        
+
 
     }
 }

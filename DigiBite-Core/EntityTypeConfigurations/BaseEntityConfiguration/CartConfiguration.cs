@@ -1,7 +1,7 @@
 ﻿using DigiBite_Core.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using static DigiBite_Core.Enums.DigiBiteEnums;
+using DigiBite_Core.Enums;
 
 namespace DigiBite_Core.EntityTypeConfigurations.EntityConfiguration
 {

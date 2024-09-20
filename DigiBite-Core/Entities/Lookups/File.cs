@@ -1,4 +1,4 @@
-﻿using static DigiBite_Core.Enums.DigiBiteEnums;
+﻿using DigiBite_Core.Enums;
 
 namespace DigiBite_Core.Entities.Lookups
 {

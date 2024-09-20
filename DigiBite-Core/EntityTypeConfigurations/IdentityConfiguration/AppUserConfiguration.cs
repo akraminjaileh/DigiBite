@@ -1,9 +1,8 @@
-﻿using DigiBite_Core.Entities.Lookups;
+﻿using DigiBite_Core.Enums;
 using DigiBite_Core.Models.Entities;
 using DigiBite_Core.Models.Lookups;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using static DigiBite_Core.Enums.DigiBiteEnums;
 
 namespace DigiBite_Core.EntityTypeConfigurations.IdentityConfiguration
 {
@@ -11,7 +10,7 @@ namespace DigiBite_Core.EntityTypeConfigurations.IdentityConfiguration
     {
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
-           
+
 
             //Foreign key 
             builder.HasMany<Address>().WithOne().HasForeignKey(x => x.UserId);

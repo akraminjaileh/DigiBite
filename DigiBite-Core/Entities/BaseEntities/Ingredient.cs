@@ -1,5 +1,5 @@
 ﻿using DigiBite_Core.Models.SharedEntity;
-using static DigiBite_Core.Enums.DigiBiteEnums;
+using DigiBite_Core.Enums;
 
 namespace DigiBite_Core.Models.Entities
 {
