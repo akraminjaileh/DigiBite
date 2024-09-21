@@ -4,6 +4,7 @@ using DigiBite_Core.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigiBite_Core.Migrations
 {
     [DbContext(typeof(DigiBiteContext))]
-    partial class DigiBiteContextModelSnapshot : ModelSnapshot
+    [Migration("20240920172104_FixDateTime")]
+    partial class FixDateTime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,7 +114,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<int>("EmployeeInformationId")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
@@ -164,7 +167,7 @@ namespace DigiBite_Core.Migrations
                         .HasMaxLength(34)
                         .HasColumnType("nvarchar(34)");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
@@ -322,7 +325,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<string>("BanReason")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("BanType")
+                    b.Property<int>("BanType")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -353,15 +356,17 @@ namespace DigiBite_Core.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int?>("Gender")
-                        .HasColumnType("int");
+                    b.Property<int>("Gender")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(142);
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
-                    b.Property<bool?>("IsBanned")
+                    b.Property<bool>("IsBanned")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
@@ -410,7 +415,6 @@ namespace DigiBite_Core.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -443,26 +447,6 @@ namespace DigiBite_Core.Migrations
                             t.HasCheckConstraint("CH_User_FirstName", "FirstName NOT LIKE '%[^a-zA-Z ]%' AND LEN(FirstName) > 2");
 
                             t.HasCheckConstraint("CH_User_LastName", "LastName NOT LIKE '%[^a-zA-Z ]%' AND LEN(LastName) > 2");
-                        });
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "c7ca5a1c-2e4b-4c8d-84fd-d9f011ad0a5b",
-                            AccessFailedCount = 0,
-                            CreationDateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "admin@admin.com",
-                            EmailConfirmed = true,
-                            FirstName = "Akram",
-                            LastModifiedDateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@ADMIN.COM",
-                            NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEB5miEfAN3YgyC3qqRnkEzOr5dtLJ1Pq/XYekMjeDaWf6sVJd+7wICicjT2yVqyozw==",
-                            PhoneNumber = "0787454867",
-                            PhoneNumberConfirmed = true,
-                            TwoFactorEnabled = false,
-                            UserName = "admin"
                         });
                 });
 
@@ -550,7 +534,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<int?>("ImageId")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
@@ -604,7 +588,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<int?>("ImageId")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
@@ -669,7 +653,7 @@ namespace DigiBite_Core.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
@@ -734,7 +718,7 @@ namespace DigiBite_Core.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
@@ -797,7 +781,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
@@ -923,7 +907,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
@@ -1051,51 +1035,51 @@ namespace DigiBite_Core.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2d65545d-5117-4c02-b38c-d16af39a735d",
+                            Id = "1c09aa58-6c11-4acd-b812-62a564564fda",
                             Name = "Owner",
                             NormalizedName = "OWNER"
                         },
                         new
                         {
-                            Id = "d4ab4131-28dc-4ec5-a025-75191006777d",
+                            Id = "1515df75-f9c3-4ee3-baba-78bbc11ab6bb",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "a94d48ef-8114-4354-8f16-33e917d6cd6f",
+                            Id = "f7d3d3ed-cb67-4c57-bd7c-2fad07ac5cb8",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "33e72989-336c-4b02-b7ce-e592de9046ab",
-                            Name = "Customer",
-                            NormalizedName = "CUSTOMER"
-                        },
-                        new
-                        {
-                            Id = "cc855f5f-1496-40b3-bee8-30e87739d57f",
-                            Name = "Cashier",
-                            NormalizedName = "CASHIER"
-                        },
-                        new
-                        {
-                            Id = "1963b562-2920-43c6-9f4b-cbad0eae4640",
-                            Name = "Delivery",
-                            NormalizedName = "DELIVERY"
-                        },
-                        new
-                        {
-                            Id = "645e06ba-26e2-44f3-83cf-24e6314afbb1",
+                            Id = "4d3b038e-ff32-4817-b5c9-278900d6e13f",
                             Name = "Waiter",
                             NormalizedName = "WAITER"
                         },
                         new
                         {
-                            Id = "c87db997-3fc6-4353-8c15-8ae4b5fd84c7",
+                            Id = "64b018cd-be43-4fb8-9816-e248ce6a9a6b",
                             Name = "Chef",
                             NormalizedName = "CHEF"
+                        },
+                        new
+                        {
+                            Id = "30401989-0582-4d05-8af1-e72382d1eb10",
+                            Name = "Cashier",
+                            NormalizedName = "CASHIER"
+                        },
+                        new
+                        {
+                            Id = "167c8fdb-641f-40ec-97d9-6f71dbbe8ad7",
+                            Name = "Delivery",
+                            NormalizedName = "DELIVERY"
+                        },
+                        new
+                        {
+                            Id = "00a109bf-6ace-4ea1-978e-ebac1ee5fa49",
+                            Name = "Customer",
+                            NormalizedName = "CUSTOMER"
                         });
                 });
 
@@ -1184,13 +1168,6 @@ namespace DigiBite_Core.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "c7ca5a1c-2e4b-4c8d-84fd-d9f011ad0a5b",
-                            RoleId = "2d65545d-5117-4c02-b38c-d16af39a735d"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

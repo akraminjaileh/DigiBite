@@ -15,11 +15,11 @@ namespace DigiBite_Api.Controllers
             try
             {
                 var items = await service.GetItems(skip, take);
-                return Ok(new ApiResponse(items));
+                return Ok(items);
             }
             catch (Exception ex)
             {
-                return BadRequest(new ApiResponse(ex.Message));
+                return BadRequest(ex.Message);
             }
         }
     }

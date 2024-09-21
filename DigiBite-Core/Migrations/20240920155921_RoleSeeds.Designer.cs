@@ -4,6 +4,7 @@ using DigiBite_Core.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigiBite_Core.Migrations
 {
     [DbContext(typeof(DigiBiteContext))]
-    partial class DigiBiteContextModelSnapshot : ModelSnapshot
+    [Migration("20240920155921_RoleSeeds")]
+    partial class RoleSeeds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,7 +96,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("CreationDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
+                        .HasDefaultValue(new DateTime(2024, 9, 20, 18, 59, 18, 525, DateTimeKind.Local).AddTicks(9519));
 
                     b.Property<string>("DocumentName")
                         .IsRequired()
@@ -111,7 +114,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<int>("EmployeeInformationId")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
@@ -151,7 +154,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("CreationDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
+                        .HasDefaultValue(new DateTime(2024, 9, 20, 18, 59, 18, 526, DateTimeKind.Local).AddTicks(3538));
 
                     b.Property<DateTime>("DateOfJoining")
                         .HasColumnType("datetime2");
@@ -164,7 +167,7 @@ namespace DigiBite_Core.Migrations
                         .HasMaxLength(34)
                         .HasColumnType("nvarchar(34)");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
@@ -322,7 +325,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<string>("BanReason")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("BanType")
+                    b.Property<int>("BanType")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -332,7 +335,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("CreationDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
+                        .HasDefaultValue(new DateTime(2024, 9, 20, 18, 59, 18, 494, DateTimeKind.Local).AddTicks(9606));
 
                     b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
@@ -353,15 +356,17 @@ namespace DigiBite_Core.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int?>("Gender")
-                        .HasColumnType("int");
+                    b.Property<int>("Gender")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(142);
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
-                    b.Property<bool?>("IsBanned")
+                    b.Property<bool>("IsBanned")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
@@ -369,7 +374,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("LastModifiedDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
+                        .HasDefaultValue(new DateTime(2024, 9, 20, 18, 59, 18, 495, DateTimeKind.Local).AddTicks(355));
 
                     b.Property<string>("LastName")
                         .HasMaxLength(20)
@@ -410,7 +415,6 @@ namespace DigiBite_Core.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -443,26 +447,6 @@ namespace DigiBite_Core.Migrations
                             t.HasCheckConstraint("CH_User_FirstName", "FirstName NOT LIKE '%[^a-zA-Z ]%' AND LEN(FirstName) > 2");
 
                             t.HasCheckConstraint("CH_User_LastName", "LastName NOT LIKE '%[^a-zA-Z ]%' AND LEN(LastName) > 2");
-                        });
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "c7ca5a1c-2e4b-4c8d-84fd-d9f011ad0a5b",
-                            AccessFailedCount = 0,
-                            CreationDateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "admin@admin.com",
-                            EmailConfirmed = true,
-                            FirstName = "Akram",
-                            LastModifiedDateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@ADMIN.COM",
-                            NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEB5miEfAN3YgyC3qqRnkEzOr5dtLJ1Pq/XYekMjeDaWf6sVJd+7wICicjT2yVqyozw==",
-                            PhoneNumber = "0787454867",
-                            PhoneNumberConfirmed = true,
-                            TwoFactorEnabled = false,
-                            UserName = "admin"
                         });
                 });
 
@@ -539,7 +523,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("CreationDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
+                        .HasDefaultValue(new DateTime(2024, 9, 20, 18, 59, 18, 527, DateTimeKind.Local).AddTicks(3552));
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -550,7 +534,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<int?>("ImageId")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
@@ -599,12 +583,12 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("CreationDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
+                        .HasDefaultValue(new DateTime(2024, 9, 20, 18, 59, 18, 527, DateTimeKind.Local).AddTicks(8697));
 
                     b.Property<int?>("ImageId")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
@@ -659,7 +643,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("CreationDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
+                        .HasDefaultValue(new DateTime(2024, 9, 20, 18, 59, 18, 528, DateTimeKind.Local).AddTicks(2307));
 
                     b.Property<string>("Description")
                         .HasMaxLength(500)
@@ -669,7 +653,7 @@ namespace DigiBite_Core.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
@@ -724,7 +708,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("CreationDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
+                        .HasDefaultValue(new DateTime(2024, 9, 20, 18, 59, 18, 528, DateTimeKind.Local).AddTicks(7802));
 
                     b.Property<string>("Description")
                         .HasMaxLength(500)
@@ -734,7 +718,7 @@ namespace DigiBite_Core.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
@@ -788,7 +772,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("CreationDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
+                        .HasDefaultValue(new DateTime(2024, 9, 20, 18, 59, 18, 529, DateTimeKind.Local).AddTicks(3948));
 
                     b.Property<string>("CustomerNotes")
                         .HasMaxLength(300)
@@ -797,7 +781,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
@@ -915,7 +899,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("CreationDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
+                        .HasDefaultValue(new DateTime(2024, 9, 20, 18, 59, 18, 526, DateTimeKind.Local).AddTicks(7302));
 
                     b.Property<decimal>("DiscountAmount")
                         .HasColumnType("decimal(18,2)");
@@ -923,7 +907,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
@@ -946,7 +930,7 @@ namespace DigiBite_Core.Migrations
                     b.Property<DateTime>("ScheduleStartDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
+                        .HasDefaultValue(new DateTime(2024, 9, 20, 18, 59, 38, 505, DateTimeKind.Local).AddTicks(7407));
 
                     b.HasKey("Id");
 
@@ -1051,51 +1035,51 @@ namespace DigiBite_Core.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2d65545d-5117-4c02-b38c-d16af39a735d",
+                            Id = "dcab0391-12fb-439b-8fcf-02d6c53d8809",
                             Name = "Owner",
                             NormalizedName = "OWNER"
                         },
                         new
                         {
-                            Id = "d4ab4131-28dc-4ec5-a025-75191006777d",
+                            Id = "e9d392e0-f1a1-42d3-a563-7f23714be90a",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "a94d48ef-8114-4354-8f16-33e917d6cd6f",
+                            Id = "3d492796-e47f-48ad-a435-c1e14993044c",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "33e72989-336c-4b02-b7ce-e592de9046ab",
-                            Name = "Customer",
-                            NormalizedName = "CUSTOMER"
-                        },
-                        new
-                        {
-                            Id = "cc855f5f-1496-40b3-bee8-30e87739d57f",
-                            Name = "Cashier",
-                            NormalizedName = "CASHIER"
-                        },
-                        new
-                        {
-                            Id = "1963b562-2920-43c6-9f4b-cbad0eae4640",
-                            Name = "Delivery",
-                            NormalizedName = "DELIVERY"
-                        },
-                        new
-                        {
-                            Id = "645e06ba-26e2-44f3-83cf-24e6314afbb1",
+                            Id = "9694064d-2269-46d0-b80b-c3a15edcb0a3",
                             Name = "Waiter",
                             NormalizedName = "WAITER"
                         },
                         new
                         {
-                            Id = "c87db997-3fc6-4353-8c15-8ae4b5fd84c7",
+                            Id = "1e1f96e2-3028-492c-bc6c-54d4c0136700",
                             Name = "Chef",
                             NormalizedName = "CHEF"
+                        },
+                        new
+                        {
+                            Id = "0ae67aa1-a99c-42df-92d3-3b551b9bdd84",
+                            Name = "Cashier",
+                            NormalizedName = "CASHIER"
+                        },
+                        new
+                        {
+                            Id = "dcd29aa5-f93b-460a-99d7-d3c6120288f3",
+                            Name = "Delivery",
+                            NormalizedName = "DELIVERY"
+                        },
+                        new
+                        {
+                            Id = "2eb505e5-1752-42ff-a463-a6837605dea7",
+                            Name = "Customer",
+                            NormalizedName = "CUSTOMER"
                         });
                 });
 
@@ -1184,13 +1168,6 @@ namespace DigiBite_Core.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "c7ca5a1c-2e4b-4c8d-84fd-d9f011ad0a5b",
-                            RoleId = "2d65545d-5117-4c02-b38c-d16af39a735d"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

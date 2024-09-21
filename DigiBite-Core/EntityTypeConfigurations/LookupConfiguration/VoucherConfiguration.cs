@@ -10,7 +10,8 @@ namespace DigiBite_Core.EntityTypeConfigurations.LookupConfiguration
         {
 
             //Nullable(is Not Null By Default) and Default value Config
-            builder.Property(x => x.ScheduleStartDate).HasDefaultValue(DateTime.Now.AddSeconds(20));
+            builder.Property(x => x.ScheduleStartDate).HasDefaultValueSql("SYSDATETIME()");
+            builder.Property(x => x.ScheduleStartDate).HasDefaultValueSql("SYSDATETIME()");
 
             //Check Constraint
             

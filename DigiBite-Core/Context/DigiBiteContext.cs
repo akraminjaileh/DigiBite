@@ -1,7 +1,8 @@
-﻿using DigiBite_Core.Entities.Lookups;
+﻿using DigiBite_Core.DbSeeds;
+using DigiBite_Core.Entities.Lookups;
 using DigiBite_Core.Entities.ManyToMany;
+using DigiBite_Core.EntityTypeConfigurations.BaseEntityConfiguration;
 using DigiBite_Core.EntityTypeConfigurations.EntityConfiguration;
-using DigiBite_Core.EntityTypeConfigurations.IdentityConfiguration;
 using DigiBite_Core.EntityTypeConfigurations.LookupConfiguration;
 using DigiBite_Core.EntityTypeConfigurations.ManyToManyConfiguration;
 using DigiBite_Core.EntityTypeConfigurations.SharedConfiguration;
@@ -9,6 +10,7 @@ using DigiBite_Core.Models.Entities;
 using DigiBite_Core.Models.Lookups;
 using DigiBite_Core.Models.ManyToMany;
 using DigiBite_Core.Models.SharedEntity;
+using DigiBite_Core.Seed;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,12 +25,14 @@ namespace DigiBite_Core.Context
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            // Identity Configuration
-            builder.ApplyConfiguration(new AppUserConfiguration());
-            builder.ApplyConfiguration(new IdentityRoleConfiguration());
- 
+
+            //DataBase Seeds
+            builder.ApplyConfiguration(new RoleSeed());
+            builder.ApplyConfiguration(new OwnerSeed());
+            builder.ApplyConfiguration(new RoleOwnerSeed());
 
             //BasicEntity Configuration 
+            builder.ApplyConfiguration(new AppUserConfiguration());           
             builder.ApplyConfiguration(new CartConfiguration());
             builder.ApplyConfiguration(new CategoryConfiguration());
             builder.ApplyConfiguration(new IngredientConfiguration());

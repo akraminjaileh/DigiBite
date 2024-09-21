@@ -14,7 +14,7 @@ namespace DigiBite_Core.EntityTypeConfigurations.SharedConfiguration
 
             //Nullable(is Not Null By Default) and Default value Config
             builder.Property(x => x.IsActive).HasDefaultValue(true);
-            builder.Property(x => x.CreationDateTime).HasDefaultValue(DateTime.Now);
+            builder.Property(x => x.CreationDateTime).HasDefaultValueSql("SYSDATETIME()");
             builder.Property(x => x.CreatedBy).IsRequired(true);
             builder.Property(x => x.LastModifiedBy).IsRequired(false);
             builder.Property(x => x.LastModifiedDateTime).IsRequired(false);

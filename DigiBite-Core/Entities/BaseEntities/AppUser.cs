@@ -7,14 +7,14 @@ namespace DigiBite_Core.Models.Entities
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public Gender Gender { get; set; }
+        public Gender? Gender { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public DateTime CreationDateTime { get; set; }
         public DateTime LastModifiedDateTime { get; set; }
 
-        public bool IsActive { get; set; }
-        public bool IsBanned { get; set; }
-        public BanType BanType { get; set; }
+        public bool? IsActive { get; set; }
+        public bool? IsBanned { get; set; }
+        public BanType? BanType { get; set; }
         public string BanReason { get; set; }
 
         //Relationships

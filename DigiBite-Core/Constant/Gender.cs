@@ -4,6 +4,5 @@
     {
         Male = 140,
         Female,
-        Unknown
     }
 }
