@@ -3,7 +3,7 @@
 namespace DigiBite_Core.Entities.Lookups
 {
     //TODO convert to Media 
-    public class File
+    public class Media
     {
         public int Id { get; set; }
         public string FileName { get; set; }

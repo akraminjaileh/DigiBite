@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DigiBite_Core.EntityTypeConfigurations.LookupConfiguration
 {
-    public class FileConfiguration : IEntityTypeConfiguration<Entities.Lookups.File>
+    public class MediaConfiguration : IEntityTypeConfiguration<Entities.Lookups.Media>
     {
-        public void Configure(EntityTypeBuilder<Entities.Lookups.File> builder)
+        public void Configure(EntityTypeBuilder<Entities.Lookups.Media> builder)
         {
             //Primary Key
             builder.HasKey(x => x.Id);

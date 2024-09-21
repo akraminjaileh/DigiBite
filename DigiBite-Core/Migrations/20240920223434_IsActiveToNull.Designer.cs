@@ -196,7 +196,7 @@ namespace DigiBite_Core.Migrations
                     b.ToTable("EmployeeInformation");
                 });
 
-            modelBuilder.Entity("DigiBite_Core.Entities.Lookups.File", b =>
+            modelBuilder.Entity("DigiBite_Core.Entities.Lookups.Media", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1233,7 +1233,7 @@ namespace DigiBite_Core.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DigiBite_Core.Entities.Lookups.File", b =>
+            modelBuilder.Entity("DigiBite_Core.Entities.Lookups.Media", b =>
                 {
                     b.HasOne("DigiBite_Core.Models.Entities.Item", null)
                         .WithMany()
@@ -1292,7 +1292,7 @@ namespace DigiBite_Core.Migrations
                         .WithOne()
                         .HasForeignKey("DigiBite_Core.Models.Entities.AppUser", "EmployeeInformationId");
 
-                    b.HasOne("DigiBite_Core.Entities.Lookups.File", null)
+                    b.HasOne("DigiBite_Core.Entities.Lookups.Media", null)
                         .WithOne()
                         .HasForeignKey("DigiBite_Core.Models.Entities.AppUser", "ProfileImgId");
                 });
@@ -1314,7 +1314,7 @@ namespace DigiBite_Core.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DigiBite_Core.Entities.Lookups.File", null)
+                    b.HasOne("DigiBite_Core.Entities.Lookups.Media", null)
                         .WithOne()
                         .HasForeignKey("DigiBite_Core.Models.Entities.Category", "ImageId");
                 });
@@ -1327,7 +1327,7 @@ namespace DigiBite_Core.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DigiBite_Core.Entities.Lookups.File", null)
+                    b.HasOne("DigiBite_Core.Entities.Lookups.Media", null)
                         .WithOne()
                         .HasForeignKey("DigiBite_Core.Models.Entities.Ingredient", "ImageId");
                 });

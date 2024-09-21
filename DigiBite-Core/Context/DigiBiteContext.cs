@@ -42,7 +42,7 @@ namespace DigiBite_Core.Context
 
             //Lookup Configuration
             builder.ApplyConfiguration(new AddressConfiguration());
-            builder.ApplyConfiguration(new FileConfiguration());
+            builder.ApplyConfiguration(new MediaConfiguration());
             builder.ApplyConfiguration(new VoucherConfiguration());
             builder.ApplyConfiguration(new EmployeeInformationConfiguration());
             builder.ApplyConfiguration(new EmployeeDocumentConfiguration());
@@ -80,7 +80,7 @@ namespace DigiBite_Core.Context
         public DbSet<Meal> Meals { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Address> Addresses { get; set; }
-        public DbSet<Entities.Lookups.File> Images { get; set; }
+        public DbSet<Media> Medias { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<ItemIngredient> ItemIngredients { get; set; }

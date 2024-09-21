@@ -11,7 +11,7 @@ namespace DigiBite_Core.EntityTypeConfigurations.EntityConfiguration
         {
 
             //Foreign key 
-            builder.HasOne<Entities.Lookups.File>().WithOne().HasForeignKey<Category>(x => x.ImageId);
+            builder.HasOne<Entities.Lookups.Media>().WithOne().HasForeignKey<Category>(x => x.ImageId);
 
 
             //Nullable(is Not Null By Default) and Default value Config
