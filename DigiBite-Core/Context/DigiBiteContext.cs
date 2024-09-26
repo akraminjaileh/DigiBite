@@ -26,11 +26,6 @@ namespace DigiBite_Core.Context
         {
             base.OnModelCreating(builder);
 
-            //DataBase Seeds
-            builder.ApplyConfiguration(new RoleSeed());
-            builder.ApplyConfiguration(new OwnerSeed());
-            builder.ApplyConfiguration(new RoleOwnerSeed());
-
             //BasicEntity Configuration 
             builder.ApplyConfiguration(new AppUserConfiguration());           
             builder.ApplyConfiguration(new CartConfiguration());

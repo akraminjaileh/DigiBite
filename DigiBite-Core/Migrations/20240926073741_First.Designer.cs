@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigiBite_Core.Migrations
 {
     [DbContext(typeof(DigiBiteContext))]
-    [Migration("20240922211738_AddIsInMenu")]
-    partial class AddIsInMenu
+    [Migration("20240926073741_First")]
+    partial class First
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -447,26 +447,6 @@ namespace DigiBite_Core.Migrations
 
                             t.HasCheckConstraint("CH_User_LastName", "LastName NOT LIKE '%[^a-zA-Z ]%' AND LEN(LastName) > 2");
                         });
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "c7ca5a1c-2e4b-4c8d-84fd-d9f011ad0a5b",
-                            AccessFailedCount = 0,
-                            CreationDateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "admin@admin.com",
-                            EmailConfirmed = true,
-                            FirstName = "Akram",
-                            LastModifiedDateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@ADMIN.COM",
-                            NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOehifwSlf/f/SwTWoiLkHyw8lAR+hVc+AAbnJO92WWdCBaFAvBfSfnPv84Hn+lVmQ==",
-                            PhoneNumber = "0787454867",
-                            PhoneNumberConfirmed = true,
-                            TwoFactorEnabled = false,
-                            UserName = "admin"
-                        });
                 });
 
             modelBuilder.Entity("DigiBite_Core.Models.Entities.Cart", b =>
@@ -703,9 +683,8 @@ namespace DigiBite_Core.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Price")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -1060,56 +1039,6 @@ namespace DigiBite_Core.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "2d65545d-5117-4c02-b38c-d16af39a735d",
-                            Name = "Owner",
-                            NormalizedName = "OWNER"
-                        },
-                        new
-                        {
-                            Id = "d4ab4131-28dc-4ec5-a025-75191006777d",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "a94d48ef-8114-4354-8f16-33e917d6cd6f",
-                            Name = "Manager",
-                            NormalizedName = "MANAGER"
-                        },
-                        new
-                        {
-                            Id = "33e72989-336c-4b02-b7ce-e592de9046ab",
-                            Name = "Customer",
-                            NormalizedName = "CUSTOMER"
-                        },
-                        new
-                        {
-                            Id = "cc855f5f-1496-40b3-bee8-30e87739d57f",
-                            Name = "Cashier",
-                            NormalizedName = "CASHIER"
-                        },
-                        new
-                        {
-                            Id = "1963b562-2920-43c6-9f4b-cbad0eae4640",
-                            Name = "Delivery",
-                            NormalizedName = "DELIVERY"
-                        },
-                        new
-                        {
-                            Id = "645e06ba-26e2-44f3-83cf-24e6314afbb1",
-                            Name = "Waiter",
-                            NormalizedName = "WAITER"
-                        },
-                        new
-                        {
-                            Id = "c87db997-3fc6-4353-8c15-8ae4b5fd84c7",
-                            Name = "Chef",
-                            NormalizedName = "CHEF"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1197,13 +1126,6 @@ namespace DigiBite_Core.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "c7ca5a1c-2e4b-4c8d-84fd-d9f011ad0a5b",
-                            RoleId = "2d65545d-5117-4c02-b38c-d16af39a735d"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

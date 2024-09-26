@@ -3,16 +3,28 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace DigiBite_Core.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class First : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "AddOnContainers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    NameEn = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AddOnContainers", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -40,8 +52,8 @@ namespace DigiBite_Core.Migrations
                     JobTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateOfJoining = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Nationality = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
-                    CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 17, 22, 3, 52, 161, DateTimeKind.Local).AddTicks(9521)),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
+                    CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSDATETIME()"),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModifiedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -49,6 +61,28 @@ namespace DigiBite_Core.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_EmployeeInformation", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AddOns",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    NameEn = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m),
+                    AddOnContainerId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AddOns", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AddOns_AddOnContainers_AddOnContainerId",
+                        column: x => x.AddOnContainerId,
+                        principalTable: "AddOnContainers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -83,8 +117,8 @@ namespace DigiBite_Core.Migrations
                     DocumentPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DocumentNote = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EmployeeInformationId = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
-                    CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 17, 22, 3, 52, 161, DateTimeKind.Local).AddTicks(3742)),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
+                    CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSDATETIME()"),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModifiedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -98,6 +132,23 @@ namespace DigiBite_Core.Migrations
                         principalTable: "EmployeeInformation",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AddOnItemMeals",
+                columns: table => new
+                {
+                    AddOnContainerId = table.Column<int>(type: "int", nullable: false),
+                    ItemId = table.Column<int>(type: "int", nullable: false),
+                    MealId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.ForeignKey(
+                        name: "FK_AddOnItemMeals_AddOnContainers_AddOnContainerId",
+                        column: x => x.AddOnContainerId,
+                        principalTable: "AddOnContainers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -177,17 +228,17 @@ namespace DigiBite_Core.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Gender = table.Column<int>(type: "int", nullable: false, defaultValue: 203),
+                    Gender = table.Column<int>(type: "int", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 17, 22, 3, 52, 113, DateTimeKind.Local).AddTicks(8241)),
-                    LastModifiedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 17, 22, 3, 52, 113, DateTimeKind.Local).AddTicks(9390)),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
-                    IsBanned = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    BanType = table.Column<int>(type: "int", nullable: false),
+                    CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSDATETIME()"),
+                    LastModifiedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSDATETIME()"),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
+                    IsBanned = table.Column<bool>(type: "bit", nullable: true, defaultValue: false),
+                    BanType = table.Column<int>(type: "int", nullable: true),
                     BanReason = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProfileImgId = table.Column<int>(type: "int", nullable: true),
                     EmployeeInformationId = table.Column<int>(type: "int", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -242,8 +293,8 @@ namespace DigiBite_Core.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Quantity = table.Column<int>(type: "int", nullable: true),
                     ItemPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    SpecialNotes = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
-                    CartStatus = table.Column<int>(type: "int", nullable: false, defaultValue: 401),
+                    SpecialNotes = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    CartStatus = table.Column<int>(type: "int", nullable: false, defaultValue: 120),
                     Subtotal = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Discount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     VoucherDiscount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
@@ -272,12 +323,15 @@ namespace DigiBite_Core.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    NameEn = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    Price = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsAvailable = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    DescriptionEn = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsAvailable = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
+                    IsInMenu = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
-                    CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 17, 22, 3, 52, 163, DateTimeKind.Local).AddTicks(9185)),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
+                    CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSDATETIME()"),
                     CreatedBy = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModifiedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -300,12 +354,15 @@ namespace DigiBite_Core.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    NameEn = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    DescriptionEn = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    IsAvailable = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    IsAvailable = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
+                    IsInMenu = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
-                    CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 17, 22, 3, 52, 164, DateTimeKind.Local).AddTicks(5117)),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
+                    CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSDATETIME()"),
                     CreatedBy = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModifiedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -327,16 +384,16 @@ namespace DigiBite_Core.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 301),
+                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 160),
                     DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CustomerNotes = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
                     Rating = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    PaymentStatus = table.Column<int>(type: "int", nullable: false, defaultValue: 501),
+                    PaymentStatus = table.Column<int>(type: "int", nullable: false, defaultValue: 180),
                     PaymentMethod = table.Column<int>(type: "int", nullable: false),
                     UserAddressId = table.Column<int>(type: "int", nullable: false),
                     CartId = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
-                    CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 17, 22, 3, 52, 164, DateTimeKind.Local).AddTicks(8909)),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
+                    CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSDATETIME()"),
                     CreatedBy = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModifiedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -362,11 +419,11 @@ namespace DigiBite_Core.Migrations
                     DiscountAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsPercentage = table.Column<bool>(type: "bit", nullable: false),
                     ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ScheduleStartDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 17, 22, 4, 12, 135, DateTimeKind.Local).AddTicks(6559)),
+                    ScheduleStartDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSDATETIME()"),
                     MinimumOrderAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     MaxUsagesPerUser = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
-                    CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 17, 22, 3, 52, 162, DateTimeKind.Local).AddTicks(4040)),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
+                    CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSDATETIME()"),
                     CreatedBy = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModifiedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -383,40 +440,6 @@ namespace DigiBite_Core.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Images",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AltText = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false, defaultValue: "FoodPhoto"),
-                    Size = table.Column<long>(type: "bigint", nullable: false),
-                    UploadedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UploadedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FileType = table.Column<int>(type: "int", nullable: false),
-                    Width = table.Column<int>(type: "int", nullable: false),
-                    Height = table.Column<int>(type: "int", nullable: false),
-                    IsPrimary = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    ItemId = table.Column<int>(type: "int", nullable: true),
-                    MealId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Images", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Images_Items_ItemId",
-                        column: x => x.ItemId,
-                        principalTable: "Items",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Images_Meals_MealId",
-                        column: x => x.MealId,
-                        principalTable: "Meals",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -438,6 +461,40 @@ namespace DigiBite_Core.Migrations
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ItemMeals_Meals_MealId",
+                        column: x => x.MealId,
+                        principalTable: "Meals",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Medias",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AltText = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false, defaultValue: "FoodPhoto"),
+                    Size = table.Column<long>(type: "bigint", nullable: false),
+                    UploadedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UploadedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FileType = table.Column<int>(type: "int", nullable: false),
+                    Width = table.Column<int>(type: "int", nullable: true),
+                    Height = table.Column<int>(type: "int", nullable: true),
+                    IsPrimary = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    ItemId = table.Column<int>(type: "int", nullable: true),
+                    MealId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Medias", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Medias_Items_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "Items",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Medias_Meals_MealId",
                         column: x => x.MealId,
                         principalTable: "Meals",
                         principalColumn: "Id");
@@ -472,11 +529,13 @@ namespace DigiBite_Core.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DescriptionEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ImageId = table.Column<int>(type: "int", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
-                    CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 17, 22, 3, 52, 162, DateTimeKind.Local).AddTicks(7819)),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
+                    CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSDATETIME()"),
                     CreatedBy = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModifiedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -492,9 +551,9 @@ namespace DigiBite_Core.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Categories_Images_ImageId",
+                        name: "FK_Categories_Medias_ImageId",
                         column: x => x.ImageId,
-                        principalTable: "Images",
+                        principalTable: "Medias",
                         principalColumn: "Id");
                 });
 
@@ -505,10 +564,11 @@ namespace DigiBite_Core.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Unit = table.Column<int>(type: "int", nullable: false, defaultValue: 703),
+                    NameEn = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Unit = table.Column<int>(type: "int", nullable: false, defaultValue: 152),
                     ImageId = table.Column<int>(type: "int", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
-                    CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 9, 17, 22, 3, 52, 163, DateTimeKind.Local).AddTicks(5137)),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
+                    CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSDATETIME()"),
                     CreatedBy = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModifiedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -523,9 +583,9 @@ namespace DigiBite_Core.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Ingredients_Images_ImageId",
+                        name: "FK_Ingredients_Medias_ImageId",
                         column: x => x.ImageId,
-                        principalTable: "Images",
+                        principalTable: "Medias",
                         principalColumn: "Id");
                 });
 
@@ -571,9 +631,7 @@ namespace DigiBite_Core.Migrations
                 {
                     ItemId = table.Column<int>(type: "int", nullable: false),
                     IngredientId = table.Column<int>(type: "int", nullable: false),
-                    QTY = table.Column<int>(type: "int", nullable: false),
-                    IngredientType = table.Column<int>(type: "int", nullable: false, defaultValue: 801),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m)
+                    QTY = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -591,19 +649,25 @@ namespace DigiBite_Core.Migrations
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[,]
-                {
-                    { "27853cd6-c826-4654-acc0-baba99c70d9d", null, "Customer", "CUSTOMER" },
-                    { "2ccdc996-6dc9-4d82-8b7d-48b2adc0fb06", null, "Chef", "CHEF" },
-                    { "411ba147-a4e5-4325-9e25-99d18f6d5c13", null, "Waiter", "WAITER" },
-                    { "48bdf511-1df9-408e-a714-1fab42c6359a", null, "Cashier", "CASHIER" },
-                    { "9bf9ea32-2843-434b-b628-93233b84becd", null, "Admin", "ADMIN" },
-                    { "9f1f0964-49a7-445a-9d84-63d400f40e77", null, "Manager", "MANAGER" },
-                    { "bffc9512-0cbe-4cd4-ac14-520646162408", null, "Delivery", "DELIVERY" }
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_AddOnItemMeals_AddOnContainerId",
+                table: "AddOnItemMeals",
+                column: "AddOnContainerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AddOnItemMeals_ItemId",
+                table: "AddOnItemMeals",
+                column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AddOnItemMeals_MealId",
+                table: "AddOnItemMeals",
+                column: "MealId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AddOns_AddOnContainerId",
+                table: "AddOns",
+                column: "AddOnContainerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_UserId",
@@ -732,22 +796,6 @@ namespace DigiBite_Core.Migrations
                 filter: "[IBAN] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Images_ImageUrl",
-                table: "Images",
-                column: "ImageUrl",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Images_ItemId",
-                table: "Images",
-                column: "ItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Images_MealId",
-                table: "Images",
-                column: "MealId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Ingredients_CreatedBy",
                 table: "Ingredients",
                 column: "CreatedBy");
@@ -780,6 +828,22 @@ namespace DigiBite_Core.Migrations
                 column: "CreatedBy");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Medias_ImageUrl",
+                table: "Medias",
+                column: "ImageUrl",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Medias_ItemId",
+                table: "Medias",
+                column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Medias_MealId",
+                table: "Medias",
+                column: "MealId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Orders_CreatedBy",
                 table: "Orders",
                 column: "CreatedBy");
@@ -793,6 +857,20 @@ namespace DigiBite_Core.Migrations
                 name: "IX_VoucherUsers_VoucherId",
                 table: "VoucherUsers",
                 column: "VoucherId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AddOnItemMeals_Items_ItemId",
+                table: "AddOnItemMeals",
+                column: "ItemId",
+                principalTable: "Items",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AddOnItemMeals_Meals_MealId",
+                table: "AddOnItemMeals",
+                column: "MealId",
+                principalTable: "Meals",
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Addresses_AspNetUsers_UserId",
@@ -827,10 +905,10 @@ namespace DigiBite_Core.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUsers_Images_ProfileImgId",
+                name: "FK_AspNetUsers_Medias_ProfileImgId",
                 table: "AspNetUsers",
                 column: "ProfileImgId",
-                principalTable: "Images",
+                principalTable: "Medias",
                 principalColumn: "Id");
         }
 
@@ -838,12 +916,18 @@ namespace DigiBite_Core.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Items_AspNetUsers_CreatedBy",
-                table: "Items");
+                name: "FK_Medias_Items_ItemId",
+                table: "Medias");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Meals_AspNetUsers_CreatedBy",
-                table: "Meals");
+                name: "FK_Medias_Meals_MealId",
+                table: "Medias");
+
+            migrationBuilder.DropTable(
+                name: "AddOnItemMeals");
+
+            migrationBuilder.DropTable(
+                name: "AddOns");
 
             migrationBuilder.DropTable(
                 name: "Addresses");
@@ -885,6 +969,9 @@ namespace DigiBite_Core.Migrations
                 name: "VoucherUsers");
 
             migrationBuilder.DropTable(
+                name: "AddOnContainers");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -897,19 +984,19 @@ namespace DigiBite_Core.Migrations
                 name: "Vouchers");
 
             migrationBuilder.DropTable(
+                name: "Items");
+
+            migrationBuilder.DropTable(
+                name: "Meals");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "EmployeeInformation");
 
             migrationBuilder.DropTable(
-                name: "Images");
-
-            migrationBuilder.DropTable(
-                name: "Items");
-
-            migrationBuilder.DropTable(
-                name: "Meals");
+                name: "Medias");
         }
     }
 }

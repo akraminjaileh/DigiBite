@@ -52,7 +52,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("AddOnContainerId");
 
-                    b.ToTable("AddOns");
+                    b.ToTable("AddOns", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Entities.Lookups.AddOnContainer", b =>
@@ -75,7 +75,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AddOnContainers");
+                    b.ToTable("AddOnContainers", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Entities.Lookups.EmployeeDocument", b =>
@@ -130,7 +130,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("EmployeeInformationId");
 
-                    b.ToTable("EmployeeDocuments");
+                    b.ToTable("EmployeeDocuments", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Entities.Lookups.EmployeeInformation", b =>
@@ -190,7 +190,7 @@ namespace DigiBite_Core.Migrations
                         .IsUnique()
                         .HasFilter("[IBAN] IS NOT NULL");
 
-                    b.ToTable("EmployeeInformation");
+                    b.ToTable("EmployeeInformation", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Entities.Lookups.Media", b =>
@@ -255,7 +255,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("MealId");
 
-                    b.ToTable("Medias");
+                    b.ToTable("Medias", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Entities.ManyToMany.AddOnItemMeal", b =>
@@ -277,7 +277,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("MealId");
 
-                    b.ToTable("AddOnItemMeals");
+                    b.ToTable("AddOnItemMeals", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Entities.ManyToMany.CartItem", b =>
@@ -305,7 +305,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("MealId");
 
-                    b.ToTable("CartItems", t =>
+                    b.ToTable("CartItems", null, t =>
                         {
                             t.HasCheckConstraint("CH_CartItem_QTY", "QTY > 0");
                         });
@@ -444,26 +444,6 @@ namespace DigiBite_Core.Migrations
 
                             t.HasCheckConstraint("CH_User_LastName", "LastName NOT LIKE '%[^a-zA-Z ]%' AND LEN(LastName) > 2");
                         });
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "c7ca5a1c-2e4b-4c8d-84fd-d9f011ad0a5b",
-                            AccessFailedCount = 0,
-                            CreationDateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "admin@admin.com",
-                            EmailConfirmed = true,
-                            FirstName = "Akram",
-                            LastModifiedDateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@ADMIN.COM",
-                            NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAaw+JzUtxf4UxYqLBUib/N8Z3BZWW551LsFcXbxlXdaUCkVrRKFQ4MJjRbC5PCBIQ==",
-                            PhoneNumber = "0787454867",
-                            PhoneNumberConfirmed = true,
-                            TwoFactorEnabled = false,
-                            UserName = "admin"
-                        });
                 });
 
             modelBuilder.Entity("DigiBite_Core.Models.Entities.Cart", b =>
@@ -521,7 +501,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Carts");
+                    b.ToTable("Carts", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Models.Entities.Category", b =>
@@ -578,7 +558,7 @@ namespace DigiBite_Core.Migrations
                         .IsUnique()
                         .HasFilter("[ImageId] IS NOT NULL");
 
-                    b.ToTable("Categories", t =>
+                    b.ToTable("Categories", null, t =>
                         {
                             t.HasCheckConstraint("CH_Category_Name", "LEN(Name) > 2");
                         });
@@ -638,7 +618,7 @@ namespace DigiBite_Core.Migrations
                         .IsUnique()
                         .HasFilter("[ImageId] IS NOT NULL");
 
-                    b.ToTable("Ingredients");
+                    b.ToTable("Ingredients", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Models.Entities.Item", b =>
@@ -707,7 +687,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("Items");
+                    b.ToTable("Items", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Models.Entities.Meal", b =>
@@ -776,7 +756,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("Meals");
+                    b.ToTable("Meals", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Models.Entities.Order", b =>
@@ -840,7 +820,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Models.Lookups.Address", b =>
@@ -901,7 +881,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Models.Lookups.Voucher", b =>
@@ -961,7 +941,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("Vouchers", t =>
+                    b.ToTable("Vouchers", null, t =>
                         {
                             t.HasCheckConstraint("CH_Voucher_ExpirationDate", "ExpirationDate > ScheduleStartDate");
 
@@ -986,7 +966,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("ItemId");
 
-                    b.ToTable("ItemIngredients", t =>
+                    b.ToTable("ItemIngredients", null, t =>
                         {
                             t.HasCheckConstraint("CH_ItemIngredient_QTY", "QTY > 0");
                         });
@@ -1007,7 +987,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("MealId");
 
-                    b.ToTable("ItemMeals", t =>
+                    b.ToTable("ItemMeals", null, t =>
                         {
                             t.HasCheckConstraint("CH_ItemMeal_QTY", "QTY > 0");
                         });
@@ -1028,7 +1008,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("VoucherId");
 
-                    b.ToTable("VoucherUsers");
+                    b.ToTable("VoucherUsers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -1056,56 +1036,6 @@ namespace DigiBite_Core.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "2d65545d-5117-4c02-b38c-d16af39a735d",
-                            Name = "Owner",
-                            NormalizedName = "OWNER"
-                        },
-                        new
-                        {
-                            Id = "d4ab4131-28dc-4ec5-a025-75191006777d",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "a94d48ef-8114-4354-8f16-33e917d6cd6f",
-                            Name = "Manager",
-                            NormalizedName = "MANAGER"
-                        },
-                        new
-                        {
-                            Id = "33e72989-336c-4b02-b7ce-e592de9046ab",
-                            Name = "Customer",
-                            NormalizedName = "CUSTOMER"
-                        },
-                        new
-                        {
-                            Id = "cc855f5f-1496-40b3-bee8-30e87739d57f",
-                            Name = "Cashier",
-                            NormalizedName = "CASHIER"
-                        },
-                        new
-                        {
-                            Id = "1963b562-2920-43c6-9f4b-cbad0eae4640",
-                            Name = "Delivery",
-                            NormalizedName = "DELIVERY"
-                        },
-                        new
-                        {
-                            Id = "645e06ba-26e2-44f3-83cf-24e6314afbb1",
-                            Name = "Waiter",
-                            NormalizedName = "WAITER"
-                        },
-                        new
-                        {
-                            Id = "c87db997-3fc6-4353-8c15-8ae4b5fd84c7",
-                            Name = "Chef",
-                            NormalizedName = "CHEF"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1193,13 +1123,6 @@ namespace DigiBite_Core.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "c7ca5a1c-2e4b-4c8d-84fd-d9f011ad0a5b",
-                            RoleId = "2d65545d-5117-4c02-b38c-d16af39a735d"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
