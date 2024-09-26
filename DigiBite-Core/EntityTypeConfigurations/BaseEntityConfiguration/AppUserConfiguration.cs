@@ -1,4 +1,4 @@
-﻿using DigiBite_Core.Enums;
+﻿using DigiBite_Core.Constant;
 using DigiBite_Core.Models.Entities;
 using DigiBite_Core.Models.Lookups;
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,4 @@
-﻿using DigiBite_Core.Enums;
+﻿using DigiBite_Core.Constant;
 using Microsoft.AspNetCore.Identity;
 
 namespace DigiBite_Core.Models.Entities

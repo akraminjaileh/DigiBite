@@ -1,6 +1,5 @@
 ﻿using DigiBite_Core.Constant;
 using DigiBite_Core.DTOs.Role;
-using DigiBite_Core.Enums;
 using DigiBite_Core.Helpers;
 using DigiBite_Core.IRepos;
 using Microsoft.AspNetCore.Identity;
@@ -124,9 +123,9 @@ namespace DigiBite_Api.Controllers
                 {
                     throw new Exception("The Role is Not Exist");
                 }
-                if (role.NormalizedName == Role.Owner.ToString().ToUpper())
+                if (role.NormalizedName == Role.SuperAdmin.ToString().ToUpper())
                 {
-                    throw new Exception("Can't Update Owner Role");
+                    throw new Exception("Can't Update SuperAdmin Role");
                 }
                 role.Name = name;
                 role.NormalizedName = name.ToUpper();
@@ -165,9 +164,9 @@ namespace DigiBite_Api.Controllers
                 {
                     throw new Exception("The Role is Not Exist");
                 }
-                if (role.NormalizedName == Role.Owner.ToString().ToUpper())
+                if (role.NormalizedName == Role.SuperAdmin.ToString().ToUpper())
                 {
-                    throw new Exception("Can't Delete Owner Role");
+                    throw new Exception("Can't Delete SuperAdmin Role");
                 }
                 var tempName = role.Name;
                 var result = await roleManager.DeleteAsync(role);

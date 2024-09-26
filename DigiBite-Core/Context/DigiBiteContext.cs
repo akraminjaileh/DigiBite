@@ -1,5 +1,4 @@
-﻿using DigiBite_Core.DbSeeds;
-using DigiBite_Core.Entities.Lookups;
+﻿using DigiBite_Core.Entities.Lookups;
 using DigiBite_Core.Entities.ManyToMany;
 using DigiBite_Core.EntityTypeConfigurations.BaseEntityConfiguration;
 using DigiBite_Core.EntityTypeConfigurations.EntityConfiguration;
@@ -10,7 +9,6 @@ using DigiBite_Core.Models.Entities;
 using DigiBite_Core.Models.Lookups;
 using DigiBite_Core.Models.ManyToMany;
 using DigiBite_Core.Models.SharedEntity;
-using DigiBite_Core.Seed;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,7 +25,7 @@ namespace DigiBite_Core.Context
             base.OnModelCreating(builder);
 
             //BasicEntity Configuration 
-            builder.ApplyConfiguration(new AppUserConfiguration());           
+            builder.ApplyConfiguration(new AppUserConfiguration());
             builder.ApplyConfiguration(new CartConfiguration());
             builder.ApplyConfiguration(new CategoryConfiguration());
             builder.ApplyConfiguration(new IngredientConfiguration());

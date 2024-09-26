@@ -1,9 +1,7 @@
-﻿using System.Security.Claims;
-
-namespace DigiBite_Core.Constant
+﻿namespace DigiBite_Core.Constant
 {
     public static class RoleClaim
-    { 
+    {
         public static Dictionary<string, string> Claims
         {
             get =>

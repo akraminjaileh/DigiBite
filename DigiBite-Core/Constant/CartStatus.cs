@@ -1,4 +1,4 @@
-﻿namespace DigiBite_Core.Enums
+﻿namespace DigiBite_Core.Constant
 {
     public enum CartStatus
     {
