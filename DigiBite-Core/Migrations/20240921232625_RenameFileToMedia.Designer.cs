@@ -4,6 +4,7 @@ using DigiBite_Core.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigiBite_Core.Migrations
 {
     [DbContext(typeof(DigiBiteContext))]
-    partial class DigiBiteContextModelSnapshot : ModelSnapshot
+    [Migration("20240921232625_RenameFileToMedia")]
+    partial class RenameFileToMedia
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -458,7 +461,7 @@ namespace DigiBite_Core.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAaw+JzUtxf4UxYqLBUib/N8Z3BZWW551LsFcXbxlXdaUCkVrRKFQ4MJjRbC5PCBIQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBs+11uy6aesq/nlo/5q+koJ0JBQBugZD9qNJnCqxyM8rR7lt+HSNVGrI1/jTWHqMQ==",
                             PhoneNumber = "0787454867",
                             PhoneNumberConfirmed = true,
                             TwoFactorEnabled = false,
@@ -674,12 +677,7 @@ namespace DigiBite_Core.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
-                    b.Property<bool?>("IsAvailable")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<bool?>("IsInMenu")
+                    b.Property<bool>("IsAvailable")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
@@ -700,8 +698,9 @@ namespace DigiBite_Core.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("Price")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -743,12 +742,7 @@ namespace DigiBite_Core.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
-                    b.Property<bool?>("IsAvailable")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<bool?>("IsInMenu")
+                    b.Property<bool>("IsAvailable")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);

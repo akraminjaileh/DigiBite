@@ -11,6 +11,7 @@ namespace DigiBite_Core.EntityTypeConfigurations.EntityConfiguration
 
             //Nullable(is Not Null By Default) and Default value Config
             builder.Property(x => x.IsAvailable).HasDefaultValue(true);
+            builder.Property(x => x.IsInMenu).HasDefaultValue(true);
             builder.Property(x => x.Description).IsRequired(false);
             builder.Property(x => x.DescriptionEn).IsRequired(false);
 

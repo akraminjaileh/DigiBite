@@ -25,8 +25,8 @@ namespace DigiBite_Core.DbSeeds
                 TwoFactorEnabled = false,
                 LockoutEnabled = false,
                 AccessFailedCount = 0,
-                ConcurrencyStamp = null,//"65eee213-baf1-402d-97e5-a94286898f9b",
-                SecurityStamp = null//"b88e32f8-5ae9-4b64-b8fc-0fc74f4a3068"
+                ConcurrencyStamp = null,
+                SecurityStamp = null
             };
             Owner.PasswordHash = new PasswordHasher<AppUser>().HashPassword(Owner, "Admin@1234");
 

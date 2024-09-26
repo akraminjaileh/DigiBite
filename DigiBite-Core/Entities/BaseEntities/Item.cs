@@ -8,9 +8,10 @@ namespace DigiBite_Core.Models.Entities
         public string NameEn { get; set; }
         public string Description { get; set; }
         public string DescriptionEn { get; set; }
-        public string Price { get; set; }
-        public bool IsAvailable { get; set; }
-
+        public decimal Price { get; set; }
+        public bool? IsAvailable { get; set; }
+        public bool? IsInMenu { get; set; }
+        
 
         //Relationships
         public int CategoryId { get; set; }

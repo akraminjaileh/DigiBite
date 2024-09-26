@@ -9,7 +9,6 @@ namespace DigiBite_Api.Configurations
     {
         public static void AddMultiScoped(this IServiceCollection services)
         {
-            services.AddScoped<IQueryRepos, QueryRepos>();
             services.AddScoped<ICommandRepos, CommandRepos>();
 
             services.AddScoped<IItemRepos, ItemRepos>();

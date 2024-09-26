@@ -1,4 +1,4 @@
-﻿using DigiBite_Core.DTOs.Item;
+﻿using DigiBite_Core.DTOs.Meal;
 using DigiBite_Core.Helpers;
 using DigiBite_Core.IServices;
 using Microsoft.AspNetCore.Mvc;
@@ -7,23 +7,23 @@ namespace DigiBite_Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ItemController(IItemService service) : ControllerBase
+    public class MealController(IMealService service) : ControllerBase
     {
         /// <summary>
-        /// Retrieves all Items.
+        /// Retrieves all Meals.
         /// </summary>
-        /// <response code="200">Items retrieved successfully.</response>
+        /// <response code="200">Meals retrieved successfully.</response>
         /// <response code="400">Bad request.</response>
-        [ProducesResponseType(typeof(ApiResponseSwagger<List<ItemsDTO>>), 200)]
+        [ProducesResponseType(typeof(ApiResponseSwagger<List<MealDTO>>), 200)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetItems(int skip, int take)
+        public async Task<IActionResult> GetMeals(int skip, int take)
         {
             try
             {
-                var items = await service.GetItems(skip, take);
-                return Ok(items);
+                var Meals = await service.GetMeals(skip, take);
+                return Ok(Meals);
             }
             catch (Exception ex)
             {
@@ -32,22 +32,22 @@ namespace DigiBite_Api.Controllers
         }
 
         /// <summary>
-        /// Retrieves Item By Id.
+        /// Retrieves Meal By Id.
         /// </summary>
-        /// <response code="200">Item retrieved successfully.</response>
-        /// <response code="404">No Item found.</response>
+        /// <response code="200">Meal retrieved successfully.</response>
+        /// <response code="404">No Meal found.</response>
         /// <response code="400">Bad request.</response>
-        [ProducesResponseType(typeof(ApiResponseSwagger<ItemsDTO>), 200)]
+        [ProducesResponseType(typeof(ApiResponseSwagger<MealDTO>), 200)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 404)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> GetItemById([FromRoute] int id)
+        public async Task<IActionResult> GetMealById([FromRoute] int id)
         {
             try
             {
-                //var items = await service.GetItems(1, 2);
-                return Ok();
+                var Meals = await service.GetMeals(1, 2);
+                return Ok(Meals);
             }
             catch (Exception ex)
             {
@@ -56,21 +56,21 @@ namespace DigiBite_Api.Controllers
         }
 
         /// <summary>
-        /// Create New Item.
+        /// Create New Meal.
         /// </summary>
-        /// <response code="200">Item has been Created successfully.</response>
+        /// <response code="200">Meal has been Created successfully.</response>
         /// <response code="400">Bad request.</response>
         [ProducesResponseType(typeof(ApiResponseSwagger<int>), 200)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 404)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
         [HttpPost]
         [Route("")]
-        public async Task<IActionResult> AddItem(AddItemDTO input)
+        public async Task<IActionResult> AddMeal(AddMealDTO input)
         {
             try
             {
-                //var items = await service.GetItems(1, 2);
-                return Ok();
+                var Meals = await service.GetMeals(1, 2);
+                return Ok(Meals);
             }
             catch (Exception ex)
             {
@@ -79,22 +79,22 @@ namespace DigiBite_Api.Controllers
         }
 
         /// <summary>
-        /// Update Item.
+        /// Update Meal.
         /// </summary>
-        /// <response code="200">Item has been Updated successfully.</response>
-        /// <response code="404">No Item found to Update.</response>
+        /// <response code="200">Meal has been Updated successfully.</response>
+        /// <response code="404">No Meal found to Update.</response>
         /// <response code="400">Bad request.</response>
         [ProducesResponseType(typeof(ApiResponseSwagger<int>), 200)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 404)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
         [HttpPut]
         [Route("")]
-        public async Task<IActionResult> UpdateItem(UpdateItemDTO input)
+        public async Task<IActionResult> UpdateMeal(UpdateMealDTO input)
         {
             try
             {
-                //var items = await service.GetItems(1, 2);
-                return Ok();
+                var Meals = await service.GetMeals(1, 2);
+                return Ok(Meals);
             }
             catch (Exception ex)
             {
@@ -103,22 +103,22 @@ namespace DigiBite_Api.Controllers
         }
 
         /// <summary>
-        /// Delete Item set IsActive Flag to False.
+        /// Delete Meal set IsActive Flag to False.
         /// </summary>
-        /// <response code="200">Item has been Deleted successfully.</response>
-        /// <response code="404">No Item found to Deleted.</response>
+        /// <response code="200">Meal has been Deleted successfully.</response>
+        /// <response code="404">No Meal found to Deleted.</response>
         /// <response code="400">Bad request.</response>
         [ProducesResponseType(typeof(ApiResponseSwagger<int>), 200)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 404)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
         [HttpDelete]
         [Route("{id}")]
-        public async Task<IActionResult> RemoveItem(int id)
+        public async Task<IActionResult> RemoveMeal(int id)
         {
             try
             {
-                //var items = await service.GetItems(1, 2);
-                return Ok();
+                var Meals = await service.GetMeals(1, 2);
+                return Ok(Meals);
             }
             catch (Exception ex)
             {

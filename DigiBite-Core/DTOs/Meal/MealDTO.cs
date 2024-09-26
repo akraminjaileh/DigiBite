@@ -1,9 +1,9 @@
-﻿namespace DigiBite_Core.DTOs.Item
+﻿namespace DigiBite_Core.DTOs.Meal
 {
-    public class ItemDTO
+    public class MealDTO
     {
         public string Name { get; set; }
-        public string Price { get; set; }
+        public decimal Price { get; set; }
         public string CategoryName { get; set; }
         public bool IsAvailable { get; set; }
     }
