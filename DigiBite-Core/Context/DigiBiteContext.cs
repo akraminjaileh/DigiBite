@@ -48,6 +48,7 @@ namespace DigiBite_Core.Context
             builder.ApplyConfiguration(new ItemMealConfiguration());
             builder.ApplyConfiguration(new VoucherUserConfiguration());
             builder.ApplyConfiguration(new AddOnItemMealConfiguration());
+            builder.ApplyConfiguration(new MediaItemConfiguration());
 
             // Apply ParentConfiguration to all entities that inherit from Parent
             var parentType = typeof(Parent);
@@ -74,6 +75,7 @@ namespace DigiBite_Core.Context
         public DbSet<Order> Orders { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Media> Medias { get; set; }
+        public DbSet<MediaItem> MediaItems { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<ItemIngredient> ItemIngredients { get; set; }

@@ -51,7 +51,6 @@ namespace DigiBite_Infra.Repos
                     FileType = fileType,
                     FileName = fileName,
                     AltText = fileName,
-                    IsPrimary = false,
                     ImageUrl = pathOnDb,
                     SizeKB = (int)file.Length / 1024,
                     UploadedBy = UploadedBy

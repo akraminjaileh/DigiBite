@@ -42,9 +42,11 @@ namespace DigiBite_Infra.Repos
                                                IngredientUnit = ingred.Unit.ToString(),
                                                QTY = itemIngred.QTY
                                            }).ToList(),
-
+                            
                             ImageUrls = (from img in context.Medias
-                                         where img.ItemId == item.Id
+                                         join imgItem in context.MediaItems
+                                         on img.Id equals imgItem.MediaId
+                                         where imgItem.ItemId == item.Id
                                          select img.ImageUrl).ToList(),
 
                         };
@@ -67,9 +69,11 @@ namespace DigiBite_Infra.Repos
                             CategoryName = (from cat in context.Categories
                                             where cat.Id == item.CategoryId
                                             select cat.Name).SingleOrDefault(),
-
+                            
                             ImageUrls = (from img in context.Medias
-                                         where img.ItemId == item.Id
+                                         join imgItem in context.MediaItems
+                                         on img.Id equals imgItem.MediaId
+                                         where imgItem.ItemId == item.Id
                                          select img.ImageUrl).ToList(),
 
                             Ingredients = (from itemIng in context.ItemIngredients
