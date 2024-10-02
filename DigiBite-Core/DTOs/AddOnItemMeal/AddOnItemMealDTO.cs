@@ -1,8 +1,7 @@
-﻿namespace DigiBite_Core.Entities.ManyToMany
+﻿namespace DigiBite_Core.DTOs.AddOnItemMeal
 {
-    public class AddOnItemMeal
+    public class AddOnItemMealDTO
     {
-        public int Id { get; set; }
         public int AddOnContainerId { get; set; }
         public int? ItemId { get; set; }
         public int? MealId { get; set; }

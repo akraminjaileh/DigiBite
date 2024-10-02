@@ -4,6 +4,7 @@ using DigiBite_Core.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigiBite_Core.Migrations
 {
     [DbContext(typeof(DigiBiteContext))]
-    partial class DigiBiteContextModelSnapshot : ModelSnapshot
+    [Migration("20240927123613_AddRelationShipItemWithCategory")]
+    partial class AddRelationShipItemWithCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,29 +36,6 @@ namespace DigiBite_Core.Migrations
                     b.Property<int>("AddOnContainerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreationDateTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
-
-                    b.Property<int?>("ImageId")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedDateTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -74,10 +54,6 @@ namespace DigiBite_Core.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AddOnContainerId");
-
-                    b.HasIndex("ImageId")
-                        .IsUnique()
-                        .HasFilter("[ImageId] IS NOT NULL");
 
                     b.ToTable("AddOns");
                 });
@@ -242,6 +218,9 @@ namespace DigiBite_Core.Migrations
                     b.Property<int>("FileType")
                         .HasColumnType("int");
 
+                    b.Property<int?>("Height")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -257,8 +236,8 @@ namespace DigiBite_Core.Migrations
                     b.Property<int?>("MealId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SizeKB")
-                        .HasColumnType("int");
+                    b.Property<long?>("Size")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("UploadedBy")
                         .IsRequired()
@@ -268,6 +247,9 @@ namespace DigiBite_Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("SYSDATETIME()");
+
+                    b.Property<int?>("Width")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -283,22 +265,16 @@ namespace DigiBite_Core.Migrations
 
             modelBuilder.Entity("DigiBite_Core.Entities.ManyToMany.AddOnItemMeal", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<int>("AddOnContainerId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ItemId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int?>("MealId")
+                        .IsRequired()
                         .HasColumnType("int");
-
-                    b.HasKey("Id");
 
                     b.HasIndex("AddOnContainerId");
 
@@ -311,12 +287,6 @@ namespace DigiBite_Core.Migrations
 
             modelBuilder.Entity("DigiBite_Core.Entities.ManyToMany.CartItem", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<int>("CartId")
                         .HasColumnType("int");
 
@@ -331,8 +301,6 @@ namespace DigiBite_Core.Migrations
 
                     b.Property<int>("QTY")
                         .HasColumnType("int");
-
-                    b.HasKey("Id");
 
                     b.HasIndex("CartId");
 
@@ -1190,10 +1158,6 @@ namespace DigiBite_Core.Migrations
                         .HasForeignKey("AddOnContainerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("DigiBite_Core.Entities.Lookups.Media", null)
-                        .WithOne()
-                        .HasForeignKey("DigiBite_Core.Entities.Lookups.AddOn", "ImageId");
                 });
 
             modelBuilder.Entity("DigiBite_Core.Entities.Lookups.EmployeeDocument", b =>
@@ -1226,11 +1190,15 @@ namespace DigiBite_Core.Migrations
 
                     b.HasOne("DigiBite_Core.Models.Entities.Item", null)
                         .WithMany()
-                        .HasForeignKey("ItemId");
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("DigiBite_Core.Models.Entities.Meal", null)
                         .WithMany()
-                        .HasForeignKey("MealId");
+                        .HasForeignKey("MealId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DigiBite_Core.Entities.ManyToMany.CartItem", b =>

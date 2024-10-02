@@ -5,10 +5,8 @@ namespace DigiBite_Core.IServices
 {
     public interface IItemService
     {
-        //Task<IEnumerable<ItemsDTO>> GetItems(int skip, int take , Predicate<ItemsDTO> predicate);
-        //Task<IEnumerable<ItemsDTO>> GetItems(int skip, int take, object orderBySelector);
-        //Task<IEnumerable<ItemsDTO>> GetItems(int skip, int take, object orderBySelector);
-        Task<IEnumerable<ItemsDTO>> GetItems(int skip, int take);
-        //IEnumerable<CategoryDTO> GetItems(int skip, int take);
+        Task<ItemDetailsDTO> GetItemDetails(int id);
+        Task<IEnumerable<ItemsDTO>> GetItems(int skip, int take, Dictionary<string, string> orderBy, string sortBy = null, bool isDescending = false);
+
     }
 }

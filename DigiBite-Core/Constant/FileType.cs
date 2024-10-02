@@ -2,11 +2,12 @@
 {
     public enum FileType
     {
-        Jpg = 130,
-        Png,
-        Gif,
+        jpg = 130,
+        png,
+        gif,
         jpeg,
-        Svg,
-        Pdf
+        svg,
+        web,
+        pdf
     }
 }

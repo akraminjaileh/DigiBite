@@ -11,7 +11,8 @@ namespace DigiBite_Core.EntityTypeConfigurations.EntityConfiguration
         {
 
             //Foreign key 
-            builder.HasOne<Entities.Lookups.Media>().WithOne().HasForeignKey<Category>(x => x.ImageId);
+            builder.HasOne<Media>().WithOne().HasForeignKey<Category>(x => x.ImageId);
+            builder.HasMany<Item>().WithOne().HasForeignKey(x => x.CategoryId).OnDelete(DeleteBehavior.NoAction);
 
 
             //Nullable(is Not Null By Default) and Default value Config

@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DigiBite_Core.EntityTypeConfigurations.LookupConfiguration
 {
-    public class MediaConfiguration : IEntityTypeConfiguration<Entities.Lookups.Media>
+    public class MediaConfiguration : IEntityTypeConfiguration<Media>
     {
-        public void Configure(EntityTypeBuilder<Entities.Lookups.Media> builder)
+        public void Configure(EntityTypeBuilder<Media> builder)
         {
             //Primary Key
             builder.HasKey(x => x.Id);
@@ -17,6 +17,7 @@ namespace DigiBite_Core.EntityTypeConfigurations.LookupConfiguration
             builder.HasOne<Item>().WithMany().HasForeignKey(x => x.ItemId);
             builder.HasOne<Meal>().WithMany().HasForeignKey(x => x.MealId);
             builder.HasOne<Ingredient>().WithOne().HasForeignKey<Ingredient>(x => x.ImageId);
+            builder.HasOne<AddOn>().WithOne().HasForeignKey<AddOn>(x => x.ImageId);
             builder.HasOne<AppUser>().WithOne().HasForeignKey<AppUser>(x => x.ProfileImgId);
             builder.HasOne<Category>().WithOne().HasForeignKey<Category>(x => x.ImageId);
 
@@ -24,9 +25,8 @@ namespace DigiBite_Core.EntityTypeConfigurations.LookupConfiguration
 
             //Nullable(is Not Null By Default) and Default value Config
             builder.Property(x => x.AltText).HasDefaultValue("FoodPhoto");
+            builder.Property(x => x.UploadedOn).HasDefaultValueSql("SYSDATETIME()");
             builder.Property(x => x.IsPrimary).HasDefaultValue(false);
-            builder.Property(x => x.Width).IsRequired(false);
-            builder.Property(x => x.Height).IsRequired(false);
             builder.Property(x => x.ItemId).IsRequired(false);
             builder.Property(x => x.MealId).IsRequired(false);
 

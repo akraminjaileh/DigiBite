@@ -10,7 +10,9 @@ namespace DigiBite_Core.EntityTypeConfigurations.ManyToManyConfiguration
     {
         public void Configure(EntityTypeBuilder<CartItem> builder)
         {
-            builder.HasNoKey();
+            //Key
+            builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).UseIdentityColumn();
             //Foreign key 
             builder.HasOne<Cart>().WithMany().HasForeignKey(x => x.CartId);
             builder.HasOne<Item>().WithMany().HasForeignKey(x => x.ItemId);

@@ -4,6 +4,7 @@ using DigiBite_Core.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigiBite_Core.Migrations
 {
     [DbContext(typeof(DigiBiteContext))]
-    partial class DigiBiteContextModelSnapshot : ModelSnapshot
+    [Migration("20240930224925_AddIdForSomeEntity")]
+    partial class AddIdForSomeEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -242,6 +245,9 @@ namespace DigiBite_Core.Migrations
                     b.Property<int>("FileType")
                         .HasColumnType("int");
 
+                    b.Property<int?>("Height")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -257,8 +263,8 @@ namespace DigiBite_Core.Migrations
                     b.Property<int?>("MealId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SizeKB")
-                        .HasColumnType("int");
+                    b.Property<long?>("Size")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("UploadedBy")
                         .IsRequired()
@@ -268,6 +274,9 @@ namespace DigiBite_Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("SYSDATETIME()");
+
+                    b.Property<int?>("Width")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -293,9 +302,11 @@ namespace DigiBite_Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("ItemId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int?>("MealId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -1226,11 +1237,15 @@ namespace DigiBite_Core.Migrations
 
                     b.HasOne("DigiBite_Core.Models.Entities.Item", null)
                         .WithMany()
-                        .HasForeignKey("ItemId");
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("DigiBite_Core.Models.Entities.Meal", null)
                         .WithMany()
-                        .HasForeignKey("MealId");
+                        .HasForeignKey("MealId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DigiBite_Core.Entities.ManyToMany.CartItem", b =>

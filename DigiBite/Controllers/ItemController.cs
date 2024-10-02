@@ -18,11 +18,11 @@ namespace DigiBite_Api.Controllers
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetItems(int skip, int take)
+        public async Task<IActionResult> GetItems(int skip, int take,[FromQuery] Dictionary<string, string>? orderBy, string? sortBy, bool isDescending)
         {
             try
             {
-                var items = await service.GetItems(skip, take);
+                var items = await service.GetItems(skip, take,orderBy,sortBy,isDescending);
                 return Ok(items);
             }
             catch (Exception ex)
@@ -37,7 +37,7 @@ namespace DigiBite_Api.Controllers
         /// <response code="200">Item retrieved successfully.</response>
         /// <response code="404">No Item found.</response>
         /// <response code="400">Bad request.</response>
-        [ProducesResponseType(typeof(ApiResponseSwagger<ItemsDTO>), 200)]
+        [ProducesResponseType(typeof(ApiResponseSwagger<ItemDetailsDTO>), 200)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 404)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
         [HttpGet]
@@ -46,8 +46,8 @@ namespace DigiBite_Api.Controllers
         {
             try
             {
-                //var items = await service.GetItems(1, 2);
-                return Ok();
+                var items = await service.GetItemDetails(id);
+                return items is null ? NotFound("No Item found.") : Ok(items);
             }
             catch (Exception ex)
             {

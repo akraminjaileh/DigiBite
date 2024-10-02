@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DigiBite_Core.DTOs.AddOnItemMeal;
+using DigiBite_Core.DTOs.ItemIngredient;
+using DigiBite_Core.Entities.ManyToMany;
+using System.ComponentModel.DataAnnotations;
 
 namespace DigiBite_Core.DTOs.Item
 {
@@ -12,10 +15,11 @@ namespace DigiBite_Core.DTOs.Item
         public string? DescriptionEn { get; set; }
         public decimal Price { get; set; }
         public bool? IsAvailable { get; set; }
-        public string CreatedBy { get; set; }
         public bool? IsInMenu { get; set; }
-
-        //Relationships
         public int? CategoryId { get; set; }
+        public IEnumerable<ItemIngredientDTO> ItemIngredients { get; set; }
+        public IEnumerable<AddOnItemMealDTO> AddOnItemMeals { get; set; }
+        public IEnumerable<int> MediaIDs { get; set; }
+
     }
 }

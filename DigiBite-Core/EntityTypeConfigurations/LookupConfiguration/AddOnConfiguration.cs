@@ -17,6 +17,8 @@ namespace DigiBite_Core.EntityTypeConfigurations.LookupConfiguration
 
             //Nullable(is Not Null By Default) and Default value Config
             builder.Property(x => x.Price).HasDefaultValue(0);
+            builder.Property(x => x.ImageId).IsRequired(false);
+
 
             //String Max Length
             builder.Property(x => x.NameEn).HasMaxLength(256);

@@ -33,4 +33,8 @@
     <ProjectReference Include="..\DigiBite-Infra\DigiBite_Infra.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UploadedFiles\" />
+  </ItemGroup>
+
 </Project>

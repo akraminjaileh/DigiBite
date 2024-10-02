@@ -2,6 +2,7 @@
 {
     public class CartItem
     {
+        public int Id { get; set; }
         //Relationships
         public int CartId { get; set; }
         public int? ItemId { get; set; } 
