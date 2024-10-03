@@ -1,6 +1,5 @@
 ﻿using DigiBite_Core.Constant;
 using DigiBite_Core.Context;
-using DigiBite_Core.DTOs.Media;
 using DigiBite_Core.Entities.Lookups;
 using DigiBite_Core.IRepos;
 using Microsoft.AspNetCore.Http;
@@ -12,7 +11,7 @@ namespace DigiBite_Infra.Repos
         public async Task<int> UploadFiles(IFormFileCollection files, string UploadedBy)
         {
             var fileList = new List<Media>();
-           
+
             foreach (var file in files)
             {
 
@@ -20,7 +19,7 @@ namespace DigiBite_Infra.Repos
 
                 //Check if file is Supported
                 bool isSupport = Enum.TryParse<FileType>(fileExtension, out FileType fileType);
-                if(!isSupport)
+                if (!isSupport)
                     throw new Exception($"The file:'{file.FileName}' is not supported. " +
                         $"Please choose one of these formats: {string.Join(", ", Enum.GetNames<FileType>())}");
 
@@ -30,8 +29,8 @@ namespace DigiBite_Infra.Repos
 
 
                 var fileName = file.FileName.Split($".{fileExtension}").First();
-                var directory =Path.Combine(Directory.GetCurrentDirectory(), "UploadedFiles");
-                var pathOnDb = $"{Guid.NewGuid}{file.FileName}";
+                var directory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
+                var pathOnDb = $"{Guid.NewGuid().ToString()}{file.FileName}";
                 var fullPath = Path.Combine(directory, pathOnDb);
                 try
                 {
@@ -44,7 +43,7 @@ namespace DigiBite_Infra.Repos
                 {
                     throw new Exception("An unexpected error occurred while uploading the file.", ex);
                 }
-               
+
 
                 fileList.Add(new Media
                 {
@@ -59,7 +58,7 @@ namespace DigiBite_Infra.Repos
 
             context.Medias.AddRange(fileList);
             return await context.SaveChangesAsync();
-            
+
 
         }
 

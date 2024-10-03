@@ -1,6 +1,8 @@
-﻿using DigiBite_Core.DTOs.Item;
+﻿using DigiBite_Core.Constant;
+using DigiBite_Core.DTOs.Item;
 using DigiBite_Core.Helpers;
 using DigiBite_Core.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DigiBite_Api.Controllers
@@ -16,6 +18,7 @@ namespace DigiBite_Api.Controllers
         /// <response code="400">Bad request.</response>
         [ProducesResponseType(typeof(ApiResponseSwagger<List<ItemsDTO>>), 200)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
+        [Authorize(Roles ="SuperAdmin")]
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> GetItems(int skip, int take,[FromQuery] Dictionary<string, string>? orderBy, string? sortBy, bool isDescending)

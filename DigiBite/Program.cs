@@ -6,6 +6,7 @@ using DigiBite_Core.Middleware;
 using DigiBite_Core.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,16 +34,17 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(op =>
 {
     op.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
     op.User.RequireUniqueEmail = true;
-    op.SignIn.RequireConfirmedPhoneNumber = true;
-    //op.SignIn.RequireConfirmedAccount = true;
+    op.SignIn.RequireConfirmedPhoneNumber = false;
+    op.SignIn.RequireConfirmedAccount = false;
+    op.SignIn.RequireConfirmedEmail = false;
 
 })
  .AddEntityFrameworkStores<DigiBiteContext>()
  .AddSignInManager<SignInManager<AppUser>>()
  .AddUserManager<UserManager<AppUser>>();
 
-
-
+//Add Custom Jwt Authentication
+builder.Services.AddCustomJwtAuth(builder.Configuration);
 
 var app = builder.Build();
 
@@ -55,6 +57,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Enable serving static files
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads")),
+    RequestPath = "/Uploads" // URL path to access the static files
+});
 
 app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 app.UseAuthentication();
