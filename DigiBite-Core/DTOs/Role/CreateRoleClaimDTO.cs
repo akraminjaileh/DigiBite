@@ -2,8 +2,8 @@
 {
     public class CreateRoleClaimDTO
     {
-        public string ClaimType { get; set; }
-        public string ClaimValue { get; set; }
+        public string Key { get; set; }
+        public string Value { get; set; }
 
     }
 }

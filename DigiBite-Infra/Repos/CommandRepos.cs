@@ -1,6 +1,7 @@
 ﻿using DigiBite_Core.Context;
 using DigiBite_Core.IRepos;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Linq.Expressions;
 
 namespace DigiBite_Infra.Repos
@@ -115,6 +116,50 @@ namespace DigiBite_Infra.Repos
             }
         }
 
+        public async Task<int> RemoveRangPermanentlyAsync<T>(IEnumerable<T> input,Expression<Func<T, bool>> predicate) where T : class
+        {
 
+            try
+            {
+                var entity = context.Set<T>().Where(predicate);
+
+                if (entity.IsNullOrEmpty())
+                    throw new KeyNotFoundException($"Can't found any of {typeof(T).Name} to remove.");
+
+                context.Set<T>().RemoveRange(entity);
+                return await context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException concurrencyEx)
+            {
+                //Concurrency issues
+                throw new Exception($"Concurrency conflict occurred while removing {typeof(T).Name}: {concurrencyEx.Message}", concurrencyEx);
+            }
+            catch (Exception ex)
+            {
+                // Catch any other unexpected errors
+                throw new Exception($"An unexpected error occurred while removing {typeof(T).Name}: {ex.Message}", ex);
+            }
+        }
+
+        public async Task<int> RemoveRangPermanentlyAsync<T>(IEnumerable<T> input) where T : class
+        {
+
+            try
+            {
+              
+                context.Set<T>().RemoveRange(input);
+                return await context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException concurrencyEx)
+            {
+                //Concurrency issues
+                throw new Exception($"Concurrency conflict occurred while removing {typeof(T).Name}: {concurrencyEx.Message}", concurrencyEx);
+            }
+            catch (Exception ex)
+            {
+                // Catch any other unexpected errors
+                throw new Exception($"An unexpected error occurred while removing {typeof(T).Name}: {ex.Message}", ex);
+            }
+        }
     }
 }

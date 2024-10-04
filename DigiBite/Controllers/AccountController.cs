@@ -13,9 +13,12 @@ namespace DigiBite_Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController(UserManager<AppUser> userManager,
+    public class AccountController(
+        UserManager<AppUser> userManager,
         SignInManager<AppUser> signInManager,
-        DigiBiteContext context, IConfiguration config) : ControllerBase
+        RoleManager<IdentityRole> roleManager,
+        DigiBiteContext context,
+        IConfiguration config) : ControllerBase
     {
 
         /// <summary>
@@ -101,10 +104,18 @@ namespace DigiBite_Api.Controllers
                     claims.Add(new Claim(ClaimTypes.Name, user.UserName));
                     claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
                     claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+
                     var roles = await userManager.GetRolesAsync(user);
                     foreach (var role in roles)
                     {
                         claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
+                        // Retrieve role claims
+                        var rolesByName = await roleManager.FindByNameAsync(role);
+                        if (rolesByName != null)
+                        {
+                            var roleClaims = await roleManager.GetClaimsAsync(rolesByName);
+                            claims.AddRange(roleClaims);
+                        }
                     }
                     //signingCredentials
                     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:SecretKey"]));

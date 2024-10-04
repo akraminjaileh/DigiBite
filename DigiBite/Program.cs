@@ -1,5 +1,6 @@
 using DigiBite_Api.Configurations;
 using DigiBite_Api.DependencyInjection;
+using DigiBite_Core.Constant;
 using DigiBite_Core.Context;
 using DigiBite_Core.Filter;
 using DigiBite_Core.Middleware;
@@ -46,13 +47,20 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(op =>
 //Add Custom Jwt Authentication
 builder.Services.AddCustomJwtAuth(builder.Configuration);
 
+//Add Authorization Policies
+builder.Services.AddAuthorization(o =>
+{
+    foreach (var claim in RoleClaim.Claims)
+        o.AddPolicy(claim.Key, policy => policy.RequireClaim(claim.Key, "true"));
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c =>c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "DigiBite V1"));
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "DigiBite V1"));
 
 }
 

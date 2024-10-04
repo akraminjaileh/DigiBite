@@ -18,7 +18,7 @@ namespace DigiBite_Api.Controllers
         /// <response code="400">Bad request.</response>
         [ProducesResponseType(typeof(ApiResponseSwagger<List<ItemsDTO>>), 200)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
-        [Authorize(Roles ="SuperAdmin")]
+        [Authorize(Policy = "Item.Read")]
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> GetItems(int skip, int take,[FromQuery] Dictionary<string, string>? orderBy, string? sortBy, bool isDescending)
