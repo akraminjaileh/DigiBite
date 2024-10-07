@@ -9,4 +9,8 @@
         MisconductBan,
         Other
     }
+    public static class test
+    {
+        public const string rol = "Can-ii";
+    }
 }

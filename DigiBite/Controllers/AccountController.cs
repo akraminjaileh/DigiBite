@@ -1,7 +1,10 @@
 ﻿using DigiBite_Core.Constant;
 using DigiBite_Core.Context;
 using DigiBite_Core.DTOs.Account;
+using DigiBite_Core.DTOs.Email;
+using DigiBite_Core.IServices;
 using DigiBite_Core.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -18,7 +21,9 @@ namespace DigiBite_Api.Controllers
         SignInManager<AppUser> signInManager,
         RoleManager<IdentityRole> roleManager,
         DigiBiteContext context,
-        IConfiguration config) : ControllerBase
+        IConfiguration config,
+        IEmailService emailSender
+        ) : ControllerBase
     {
 
         /// <summary>
@@ -79,14 +84,19 @@ namespace DigiBite_Api.Controllers
 
 
         /// <summary>
-        /// Authenticates a user.
+        /// Authenticates a user and generates a JWT token.
         /// </summary>
-        /// <param name="input">The login credentials.</param>
-        /// <response code="200">Login successful.</response>
+        /// <param name="input">The login credentials including username and password.</param>
+        /// <response code="200">Login successful and JWT token is returned.</response>
         /// <response code="400">Invalid username or password.</response>
-        /// <response code="403">Login not allowed.</response>
+        /// <response code="403">Login not allowed, e.g., email not confirmed.</response>
         /// <response code="423">User account is locked.</response>
-        /// <response code="500">Internal server error.</response>
+        /// <response code="500">Internal server error occurred during login.</response>
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status423Locked)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         [HttpPost]
         [Route("[Action]")]
         public async Task<IActionResult> Login(LoginDTO input)
@@ -140,7 +150,7 @@ namespace DigiBite_Api.Controllers
                 }
                 else if (result.IsNotAllowed)
                 {
-                    return StatusCode(403, "Login is not allowed.");
+                    return StatusCode(403, "Login is not allowed. Please confirm your email");
                 }
                 else
                 {
@@ -153,10 +163,160 @@ namespace DigiBite_Api.Controllers
             }
         }
 
+       
+
+        /// <summary>
+        /// Sends a password reset link to the user's email.
+        /// </summary>
+        /// <param name="input">The email address of the user requesting a password reset.</param>
+        /// <response code="200">Password reset link successfully sent.</response>
+        /// <response code="400">Bad request, e.g., user not found or invalid email.</response>
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [HttpPost]
+        [Route("[Action]")]
+        public async Task<IActionResult> ForgotPassword(InputEmailDTO input)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var user = await userManager.FindByEmailAsync(input.Email);
+            if (user == null)
+                return BadRequest("User not found");
+
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+            var callbackUrl = Url.Action("ResetPassword", "Account", new { token, email = user.Email }, Request.Scheme);
+
+            var emailData = new EmailDTO
+            {
+                EmailToId = user.Email,
+                EmailToName = user.FirstName,
+                EmailSubject = "Reset Your Password",
+                EmailBody = $"Hello {user.FirstName}, \n\nIt looks like you requested a password reset." +
+                " To reset your password," +
+                $" please click the link below:\n\n{callbackUrl}\n\n" +
+                "If you didn't request a password reset, please ignore this email." +
+                "\n\nBest regards,\nDigiBite"
+
+            };
+
+            emailSender.SendMail(emailData);
+
+            return Ok(token);
+            //return Ok("Password reset link has been sent to your email.");
+        }
 
 
+        /// <summary>
+        /// Resets the user's password.
+        /// </summary>
+        /// <param name="model">The password reset details including email, token, and new password.</param>
+        /// <response code="200">Password reset successful.</response>
+        /// <response code="400">Bad request, e.g., invalid or expired token.</response>
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [HttpPost]
+        [Route("[Action]")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDTO model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var user = await userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+                return BadRequest("Invalid request.");
+
+            var result = await userManager.ResetPasswordAsync(user, model.Token, model.Password);
+            if (!result.Succeeded)
+            {
+                if (result.Errors.Any(e => e.Code == "InvalidToken"))
+                {
+                    return BadRequest("Invalid or expired token.");
+                }
+                return BadRequest(result.Errors);
+            }
+
+            return Ok("Password has been reset successfully.");
+        }
 
 
+        /// <summary>
+        /// Sends a confirmation email to the user's email address.
+        /// </summary>
+        /// <param name="input">The email address of the user requesting email confirmation.</param>
+        /// <response code="200">Confirmation email sent successfully.</response>
+        /// <response code="400">Bad request, e.g., email is already confirmed.</response>
+        /// <response code="404">User not found.</response>
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [HttpPost]
+        [Route("[Action]")]
+        public async Task<IActionResult> SendConfirmationEmail([FromBody] InputEmailDTO input)
+        {
+            if (string.IsNullOrEmpty(input.Email))
+                return BadRequest("Email is required");
+
+            var user = await userManager.FindByEmailAsync(input.Email);
+            if (user == null)
+                return NotFound($"User with email '{input.Email}' not found");
+
+            if (user.EmailConfirmed)
+                return BadRequest("Email is already confirmed");
+
+            var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+            var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account",
+                                    new { userId = user.Id, token }, Request.Scheme);
+
+            var emailData = new EmailDTO
+            {
+                EmailToId = user.Email,
+                EmailToName = user.FirstName,
+                EmailSubject = "Confirm your email",
+                EmailBody = $"Hello {user.FirstName}, \n\n" +
+                   " Please confirm your account by clicking below link:" +
+                   $"\n\n{callbackUrl}\n\n" +
+                   "If you didn't receive a link, please ignore this email." +
+                   "\n\nBest regards,\nDigiBite"
+
+            };
+            emailSender.SendMail(emailData);
+
+            var result = new {token, userId = user.Id };
+            return Ok(result);
+            //return Ok("Confirmation email has been sent.");
+        }
+
+
+        /// <summary>
+        /// Confirms the user's email address.
+        /// </summary>
+        /// <param name="input">The user ID and email confirmation token.</param>
+        /// <response code="200">Email confirmed successfully.</response>
+        /// <response code="400">Bad request, e.g., invalid token or user ID.</response>
+        /// <response code="404">User not found.</response>
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [HttpPost]
+        [Route("[Action]")]
+        public async Task<IActionResult> ConfirmEmail(ConfirmEmailDTO input)
+        {
+            if (string.IsNullOrEmpty(input.userId) || string.IsNullOrEmpty(input.token))
+                return BadRequest("UserId and Token are required");
+
+            var user = await userManager.FindByIdAsync(input.userId);
+
+            if (user == null)
+                return NotFound($"User with ID '{input.userId}' not found");
+
+            var result = await userManager.ConfirmEmailAsync(user, input.token);
+
+            if (result.Succeeded)
+                return Ok("Email confirmed successfully!");
+
+            return BadRequest("Error confirming email");
+        }
 
 
     }

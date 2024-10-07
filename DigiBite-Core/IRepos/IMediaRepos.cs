@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DigiBite_Core.Entities.Lookups;
+using Microsoft.AspNetCore.Http;
 
 namespace DigiBite_Core.IRepos
 {
     public interface IMediaRepos
     {
-        Task<int> UploadFiles(IFormFileCollection files, string UploadedBy);
+        Task RemoveFile(int id);
+        Task<List<Media>> UploadFiles(IFormFileCollection files, string uploadedBy);
+        Task<Media> UploadFile(IFormFile file, string uploadedBy);
     }
 }

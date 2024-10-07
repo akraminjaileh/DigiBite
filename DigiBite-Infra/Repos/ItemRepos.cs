@@ -6,12 +6,12 @@ using DigiBite_Core.Extension;
 using DigiBite_Core.Helpers;
 using DigiBite_Core.IRepos;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace DigiBite_Infra.Repos
 {
     public class ItemRepos(DigiBiteContext context) : IItemRepos
     {
+
         public async Task<IEnumerable<ItemsDTO>> GetItems(
             int skip, int take,
             Dictionary<string, string> orderBy,
@@ -25,7 +25,7 @@ namespace DigiBite_Infra.Repos
                         select new ItemsDTO
                         {
                             Id = item.Id,
-                            Name = item.Name,
+                            Name = LanguageService.SelectLang(item.Name, item.NameEn),
                             Price = item.Price,
                             IsAvailable = item.IsAvailable,
                             IsInMenu = item.IsInMenu,
@@ -42,7 +42,7 @@ namespace DigiBite_Infra.Repos
                                                IngredientUnit = ingred.Unit.ToString(),
                                                QTY = itemIngred.QTY
                                            }).ToList(),
-                            
+
                             ImageUrls = (from img in context.Medias
                                          join imgItem in context.MediaItems
                                          on img.Id equals imgItem.MediaId
@@ -54,6 +54,7 @@ namespace DigiBite_Infra.Repos
             return await items.ToListAsync();
 
         }
+
 
         public async Task<ItemDetailsDTO> GetItemDetails(int id)
         {
@@ -69,7 +70,7 @@ namespace DigiBite_Infra.Repos
                             CategoryName = (from cat in context.Categories
                                             where cat.Id == item.CategoryId
                                             select cat.Name).SingleOrDefault(),
-                            
+
                             ImageUrls = (from img in context.Medias
                                          join imgItem in context.MediaItems
                                          on img.Id equals imgItem.MediaId
@@ -127,7 +128,7 @@ namespace DigiBite_Infra.Repos
             return await query.SingleOrDefaultAsync();
         }
 
-        
+
 
 
     }

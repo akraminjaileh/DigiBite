@@ -1,8 +1,10 @@
 ﻿using DigiBite_Core.Context;
 using DigiBite_Core.IRepos;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.IdentityModel.Tokens;
 using System.Linq.Expressions;
+using System.Transactions;
 
 namespace DigiBite_Infra.Repos
 {
@@ -60,15 +62,11 @@ namespace DigiBite_Infra.Repos
             }
         }
 
-        public async Task<int> UpdateAsync<T>(Expression<Func<T, bool>> predicate) where T : class
+        public async Task<int> UpdateAsync<T>(T entity) where T : class
         {
 
             try
             {
-                var entity = context.Set<T>().FirstOrDefault(predicate);
-
-                if (entity == null)
-                    throw new KeyNotFoundException($"{typeof(T).Name} entity not found for update.");
 
                 context.Set<T>().Update(entity);
                 return await context.SaveChangesAsync();
@@ -91,42 +89,40 @@ namespace DigiBite_Infra.Repos
             }
         }
 
-        public async Task<int> RemovePermanentlyAsync<T>(Expression<Func<T, bool>> predicate) where T : class
+        public async Task<int> UpdateRangAsync<T>(IEnumerable<T> entity) where T : class
         {
 
             try
             {
-                var entity = context.Set<T>().FirstOrDefault(predicate);
 
-                if (entity == null)
-                    throw new KeyNotFoundException($"{typeof(T).Name} entity not found for removal.");
-
-                context.Set<T>().Remove(entity);
+                context.Set<T>().UpdateRange(entity);
                 return await context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException concurrencyEx)
             {
                 //Concurrency issues
-                throw new Exception($"Concurrency conflict occurred while removing {typeof(T).Name}: {concurrencyEx.Message}", concurrencyEx);
+                throw new Exception($"Concurrency conflict occurred while updating {typeof(T).Name}: {concurrencyEx.Message}", concurrencyEx);
             }
+            catch (DbUpdateException dbEx)
+            {
+                // Constraint Exception
+                throw new Exception($"Database error occurred while updating {typeof(T).Name}: {dbEx.Message}", dbEx);
+            }
+
             catch (Exception ex)
             {
                 // Catch any other unexpected errors
-                throw new Exception($"An unexpected error occurred while removing {typeof(T).Name}: {ex.Message}", ex);
+                throw new Exception($"An unexpected error occurred while updating {typeof(T).Name}: {ex.Message}", ex);
             }
         }
 
-        public async Task<int> RemoveRangPermanentlyAsync<T>(IEnumerable<T> input,Expression<Func<T, bool>> predicate) where T : class
+        public async Task<int> RemovePermanentlyAsync<T>(T entity) where T : class
         {
 
             try
             {
-                var entity = context.Set<T>().Where(predicate);
 
-                if (entity.IsNullOrEmpty())
-                    throw new KeyNotFoundException($"Can't found any of {typeof(T).Name} to remove.");
-
-                context.Set<T>().RemoveRange(entity);
+                context.Set<T>().Remove(entity);
                 return await context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException concurrencyEx)
@@ -161,5 +157,11 @@ namespace DigiBite_Infra.Repos
                 throw new Exception($"An unexpected error occurred while removing {typeof(T).Name}: {ex.Message}", ex);
             }
         }
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+            => await context.Database.BeginTransactionAsync();
+        
+
+
     }
 }
