@@ -11,6 +11,6 @@ namespace DigiBite_Core.IServices
         Task<int> UpdateItemWithDetails(UpdateItemDTO input, string lastModifiedBy, int itemId);
         Task<int> RemoveItem(int itemId, string lastModifiedBy);
         Task<int> BulkRemoveItem(List<int> itemId, string lastModifiedBy);
-
+        Task<int> UpdateItemImages(int itemId, List<ItemImagesDTO> inputs, string lastModifiedBy);
     }
 }

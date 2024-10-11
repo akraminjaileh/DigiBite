@@ -17,6 +17,8 @@ namespace DigiBite_Infra.Services
         public async Task<List<Media>> UploadFiles(IFormFileCollection files, string uploadedBy)
                   => await repos.UploadFiles(files, uploadedBy);
 
+        public async Task<string> GetFileUrlById(int id)
+                 => await repos.GetFileUrlById(id);
 
     }
 }

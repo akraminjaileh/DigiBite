@@ -1,9 +1,9 @@
 ﻿using DigiBite_Core.DTOs.AddOnContainer;
-using DigiBite_Core.DTOs.Ingredient;
+using DigiBite_Core.DTOs.Item;
 
-namespace DigiBite_Core.DTOs.Item
+namespace DigiBite_Core.DTOs.Meal
 {
-    public class ItemDetailsDTO
+    public class MealDetailsDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -12,7 +12,7 @@ namespace DigiBite_Core.DTOs.Item
         public bool? IsAvailable { get; set; }
         public bool? IsInMenu { get; set; }
         public IEnumerable<string> ImageUrls { get; set; }
-        public IEnumerable<IngredientsWithImageDTO> Ingredients { get; set; }
+        public IEnumerable<ItemOnMealWithImageDTO> Items { get; set; }
         public IEnumerable<AddOnContainerDTO> AddOnContainers { get; set; }
 
         public string? CategoryName { get; set; }

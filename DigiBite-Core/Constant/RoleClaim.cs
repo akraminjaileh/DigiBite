@@ -73,7 +73,7 @@
 
 
         // Cart Claims
-        public static class Cart
+        public static class CartPolicy
         {
             public const string Read = "Cart.Read";
             public const string Create = "Cart.Create";
@@ -82,7 +82,7 @@
         }
 
         // Category Claims
-        public static class Category
+        public static class CategoryPolicy
         {
             public const string Read = "Category.Read";
             public const string Create = "Category.Create";
@@ -91,7 +91,7 @@
         }
 
         // Ingredient Claims
-        public static class Ingredient
+        public static class IngredientPolicy
         {
             public const string Read = "Ingredient.Read";
             public const string Create = "Ingredient.Create";
@@ -100,7 +100,7 @@
         }
 
         // Item Claims
-        public static class Item
+        public static class ItemPolicy
         {
             public const string Read = "Item.Read";
             public const string Create = "Item.Create";
@@ -109,7 +109,7 @@
         }
 
         // Meal Claims
-        public static class Meal
+        public static class MealPolicy
         {
             public const string Read = "Meal.Read";
             public const string Create = "Meal.Create";
@@ -118,7 +118,7 @@
         }
 
         // Order Claims
-        public static class Order
+        public static class OrderPolicy
         {
             public const string Read = "Order.Read";
             public const string Create = "Order.Create";
@@ -127,7 +127,7 @@
         }
 
         // Address Claims
-        public static class Address
+        public static class AddressPolicy
         {
             public const string Read = "Address.Read";
             public const string Create = "Address.Create";
@@ -136,7 +136,7 @@
         }
 
         // Image Claims
-        public static class Image
+        public static class ImagePolicy
         {
             public const string Read = "Image.Read";
             public const string Create = "Image.Create";
@@ -145,7 +145,7 @@
         }
 
         // Voucher Claims
-        public static class Voucher
+        public static class VoucherPolicy
         {
             public const string Read = "Voucher.Read";
             public const string Create = "Voucher.Create";
@@ -154,7 +154,7 @@
         }
 
         // EmployeeInformation Claims
-        public static class EmployeeInformation
+        public static class EmployeeInformationPolicy
         {
             public const string Read = "EmployeeInformation.Read";
             public const string Create = "EmployeeInformation.Create";
@@ -163,7 +163,7 @@
         }
 
         // EmployeeDocument Claims
-        public static class EmployeeDocument
+        public static class EmployeeDocumentPolicy
         {
             public const string Read = "EmployeeDocument.Read";
             public const string Create = "EmployeeDocument.Create";
@@ -172,7 +172,7 @@
         }
 
         // AddOn Claims
-        public static class AddOn
+        public static class AddOnPolicy
         {
             public const string Read = "AddOn.Read";
             public const string Create = "AddOn.Create";

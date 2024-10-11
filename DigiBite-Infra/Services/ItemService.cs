@@ -74,7 +74,7 @@ namespace DigiBite_Infra.Services
                 }
 
                 await transaction.CommitAsync();
-                return result;
+                return item.Id;
 
             }
             catch (Exception ex)
@@ -124,7 +124,7 @@ namespace DigiBite_Infra.Services
                     var itemIngredientsDb = await query.GetEntitiesAsync<ItemIngredient>(x => x.ItemId == item.Id);
 
                     var willBeDeleted = itemIngredientsDb.ExceptBy(itemIngredients.Select(i => i.IngredientId), x => x.IngredientId);
-                    var willBeAdded = itemIngredients.ExceptBy(itemIngredientsDb.Select(i=>i.IngredientId),x=> x.IngredientId);
+                    var willBeAdded = itemIngredients.ExceptBy(itemIngredientsDb.Select(i => i.IngredientId), x => x.IngredientId);
                     if (willBeDeleted.Any())
                     {
                         await command.RemoveRangPermanentlyAsync(willBeDeleted);
@@ -151,7 +151,7 @@ namespace DigiBite_Infra.Services
                     }
                     var addOnItemMealsDb = await query.GetEntitiesAsync<AddOnItemMeal>(x => x.ItemId == item.Id);
 
-                    var willBeDeleted = addOnItemMealsDb.ExceptBy(addOnItemMeals.Select(i=>i.AddOnContainerId),x=>x.AddOnContainerId);
+                    var willBeDeleted = addOnItemMealsDb.ExceptBy(addOnItemMeals.Select(i => i.AddOnContainerId), x => x.AddOnContainerId);
                     var willBeAdded = addOnItemMeals.ExceptBy(addOnItemMealsDb.Select(i => i.AddOnContainerId), x => x.AddOnContainerId);
                     if (willBeDeleted.Any())
                     {
@@ -178,6 +178,53 @@ namespace DigiBite_Infra.Services
 
         }
 
+        public async Task<int> UpdateItemImages(int itemId, List<ItemImagesDTO> inputs, string lastModifiedBy)
+        {
+            var item = await query.GetEntityAsync<Item>(x => x.Id == itemId);
+            if (item == null)
+                throw new Exception("Item not found");
+
+            item.LastModifiedBy = lastModifiedBy;
+            item.LastModifiedDateTime = DateTime.UtcNow;
+
+            var mediaItem = new List<MediaItem>();
+            foreach (var input in inputs)
+            {
+                mediaItem.Add(new MediaItem
+                {
+                    ItemId = item.Id,
+                    MediaId = input.imageId,
+                    IsPrimary = input.IsPrimary
+                });
+            }
+
+            var mediaItemDbDb = await query.GetEntitiesAsync<MediaItem>(x => x.ItemId == item.Id);
+
+
+            var willBeDeleted = mediaItemDbDb
+                     .ExceptBy(mediaItem
+                     .Select(i => new { i.MediaId, i.IsPrimary }), x => new { x.MediaId, x.IsPrimary });
+
+            var willBeAdded = mediaItem
+                .ExceptBy(mediaItemDbDb
+                .Select(i => new { i.MediaId, i.IsPrimary }), x => new { x.MediaId, x.IsPrimary });
+
+            bool isFoundToDelete = willBeDeleted.Any();
+            bool isFoundToAdd = willBeAdded.Any();
+
+
+            if (isFoundToDelete)
+            {
+                await command.RemoveRangPermanentlyAsync(willBeDeleted);
+            }
+            if (isFoundToAdd)
+            {
+
+                await command.AddRangAsync(willBeAdded);
+            }
+
+            return isFoundToAdd || isFoundToDelete ? await command.UpdateAsync<Item>(item) : 0;
+        }
 
         public async Task<int> RemoveItem(int itemId, string lastModifiedBy)
         {
@@ -195,7 +242,7 @@ namespace DigiBite_Infra.Services
             {
                 item.IsActive = false;
                 item.LastModifiedBy = lastModifiedBy;
-                item.LastModifiedDateTime = DateTime.UtcNow; 
+                item.LastModifiedDateTime = DateTime.UtcNow;
             }
 
             return await command.UpdateRangAsync(items);

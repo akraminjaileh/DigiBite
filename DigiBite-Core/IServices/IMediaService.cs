@@ -8,5 +8,6 @@ namespace DigiBite_Core.IServices
         Task RemoveFile(int mediaId);
         Task<List<Media>> UploadFiles(IFormFileCollection files, string uploadedBy);
         Task<Media> UploadFile(IFormFile file, string uploadedBy);
+        Task<string> GetFileUrlById(int id);
     }
 }

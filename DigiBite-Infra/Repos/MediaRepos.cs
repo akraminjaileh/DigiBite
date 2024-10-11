@@ -194,7 +194,25 @@ namespace DigiBite_Infra.Repos
         }
 
 
+        public async Task<string> GetFileUrlById(int id)
+        {
+            try
+            {
+                var file = await context.Medias.FirstOrDefaultAsync(x => x.Id == id);
+                if (file == null)
+                {
+                    return string.Empty;
+                }
 
+                return file.ImageUrl;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception($"An error occurred while getting the file: {ex.Message}", ex);
+            }
+        }
 
     }
 }

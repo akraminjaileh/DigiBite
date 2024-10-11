@@ -43,11 +43,11 @@ namespace DigiBite_Infra.Repos
                                                QTY = itemIngred.QTY
                                            }).ToList(),
 
-                            ImageUrls = (from img in context.Medias
+                             PrimaryImageUrl = (from img in context.Medias
                                          join imgItem in context.MediaItems
                                          on img.Id equals imgItem.MediaId
-                                         where imgItem.ItemId == item.Id
-                                         select img.ImageUrl).ToList(),
+                                         where imgItem.ItemId == item.Id && imgItem.IsPrimary
+                                         select img.ImageUrl).FirstOrDefault(),
 
                         };
 
@@ -59,7 +59,7 @@ namespace DigiBite_Infra.Repos
         public async Task<ItemDetailsDTO> GetItemDetails(int id)
         {
             var query = from item in context.Items
-                        where item.Id == id
+                        where item.Id == id && item.IsActive == true
                         select new ItemDetailsDTO
                         {
                             Id = item.Id,

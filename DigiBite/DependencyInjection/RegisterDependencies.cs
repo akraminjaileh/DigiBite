@@ -16,6 +16,8 @@ namespace DigiBite_Api.Configurations
             services.AddScoped<IItemService, ItemService>();
             services.AddScoped<IMediaRepos, MediaRepos>();
             services.AddScoped<IMediaService, MediaServices>();
+            services.AddScoped<IMealRepos, MealRepos>();
+            services.AddScoped<IMealService, MealService>();
 
         }
     }

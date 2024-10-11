@@ -20,7 +20,6 @@ namespace DigiBite_Api.Controllers
         /// <response code="400">Bad request.</response>
         [ProducesResponseType(typeof(ApiResponseSwagger<List<ItemsDTO>>), 200)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
-        [Authorize(Policy = "Item.Read")]
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> GetItems(int skip, int take, [FromQuery] Dictionary<string, string>? orderBy, string? sortBy, bool isDescending)
@@ -70,14 +69,14 @@ namespace DigiBite_Api.Controllers
         [ProducesResponseType(typeof(ApiResponseSwagger<int>), 200)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 404)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
-        [Authorize(Policy = RoleClaim.Item.Create)]
+        [Authorize(Policy = RoleClaim.ItemPolicy.Create)]
         [HttpPost]
         [Route("")]
         public async Task<IActionResult> AddItem(AddItemDTO input)
         {
             try
             {
-                var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var result = await service.AddItemWithDetails(input, userId);
                 return Ok(result);
             }
@@ -97,15 +96,42 @@ namespace DigiBite_Api.Controllers
         [ProducesResponseType(typeof(ApiResponseSwagger<int>), 200)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 404)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
-        [Authorize(Policy =RoleClaim.Item.Update)]
+        [Authorize(Policy = RoleClaim.ItemPolicy.Update)]
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateItem(UpdateItemDTO input , int id)
+        public async Task<IActionResult> UpdateItem(UpdateItemDTO input, int id)
         {
             try
             {
-                var userId = User.Claims.FirstOrDefault(x=>x.Type == ClaimTypes.NameIdentifier)?.Value;
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var result = await service.UpdateItemWithDetails(input, userId, id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Update Item Images.
+        /// </summary>
+        /// <response code="200">Images has been Updated successfully.</response>
+        /// <response code="404">No Item found to Update.</response>
+        /// <response code="400">Bad request.</response>
+        [ProducesResponseType(typeof(ApiResponseSwagger<int>), 200)]
+        [ProducesResponseType(typeof(ApiResponseSwagger<string>), 404)]
+        [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
+        [Authorize(Policy = RoleClaim.ItemPolicy.Update)]
+        [HttpPut]
+        [Route("")]
+        public async Task<IActionResult> UpdateItemImages(List<ItemImagesDTO> input, int itemId)
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var result = await service.UpdateItemImages(itemId, input, userId);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -124,14 +150,14 @@ namespace DigiBite_Api.Controllers
         [ProducesResponseType(typeof(ApiResponseSwagger<int>), 200)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 404)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
-        [Authorize(Policy = RoleClaim.Item.Delete)]
+        [Authorize(Policy = RoleClaim.ItemPolicy.Delete)]
         [HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> RemoveItem(int id)
         {
             try
             {
-                var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var result = await service.RemoveItem(id, userId);
                 return Ok(result);
             }
@@ -151,15 +177,15 @@ namespace DigiBite_Api.Controllers
         [ProducesResponseType(typeof(ApiResponseSwagger<int>), 200)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 404)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
-        [Authorize(Policy =RoleClaim.Item.Delete)]
+        [Authorize(Policy = RoleClaim.ItemPolicy.Delete)]
         [HttpDelete]
         [Route("")]
-        public async Task<IActionResult> BulkRemoveItem([FromBody]List<int> itemIDs)
+        public async Task<IActionResult> BulkRemoveItem([FromBody] List<int> itemIDs)
         {
             try
             {
-                var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
-                var result = await service.BulkRemoveItem(itemIDs,userId);
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var result = await service.BulkRemoveItem(itemIDs, userId);
                 return Ok(result);
             }
             catch (Exception ex)

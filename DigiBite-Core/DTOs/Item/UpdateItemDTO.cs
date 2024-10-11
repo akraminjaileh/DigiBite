@@ -1,6 +1,5 @@
 ﻿using DigiBite_Core.DTOs.AddOnItemMeal;
 using DigiBite_Core.DTOs.ItemIngredient;
-using System.ComponentModel.DataAnnotations;
 
 namespace DigiBite_Core.DTOs.Item
 {
