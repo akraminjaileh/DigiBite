@@ -6,7 +6,7 @@ namespace DigiBite_Core.DTOs.Ingredient
     {
         public string Name { get; set; }
         public string NameEn { get; set; }
-        public IngredientUnit Unit { get; set; }
+        public string Unit { get; set; }
         public int? ImageId { get; set; }
     }
 }

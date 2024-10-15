@@ -20,11 +20,9 @@ namespace DigiBite_Core.EntityTypeConfigurations.EntityConfiguration
             builder.Property(x => x.Description).IsRequired(false);
             builder.Property(x => x.DescriptionEn).IsRequired(false);
 
-
             //Check Constraint
             builder.ToTable(x =>
             x.HasCheckConstraint("CH_Category_Name", "LEN(Name) > 2"));
-
 
             //String Max Length
             builder.Property(x => x.Name).HasMaxLength(32);

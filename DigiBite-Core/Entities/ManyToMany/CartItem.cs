@@ -7,8 +7,10 @@
         public int CartId { get; set; }
         public int? ItemId { get; set; } 
         public int? MealId { get; set; } 
-        public int? IngredientId { get; set; } 
-        public int QTY { get; set; }
+        public int Quantity { get; set; }
+        public string? SpecialNotes { get; set; }
+        public decimal ItemPrice { get; set; }  //Price at the time the item was added
+
 
     }
 }

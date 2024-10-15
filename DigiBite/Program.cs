@@ -64,13 +64,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger(c =>
-    {
-        c.SerializeAsV2 = true;
-    });
-
+    app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "DigiBite V1"));
-
 }
 
 app.UseHttpsRedirection();

@@ -1,7 +1,7 @@
-﻿using DigiBite_Core.Models.Entities;
+﻿using DigiBite_Core.Constant;
+using DigiBite_Core.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using DigiBite_Core.Constant;
 
 namespace DigiBite_Core.EntityTypeConfigurations.EntityConfiguration
 {
@@ -15,9 +15,6 @@ namespace DigiBite_Core.EntityTypeConfigurations.EntityConfiguration
 
             //Nullable(is Not Null By Default) and Default value Config
             builder.Property(x => x.CartStatus).HasDefaultValue(CartStatus.Active);
-            builder.Property(x => x.Quantity).IsRequired(false);
-            builder.Property(x => x.ItemPrice).IsRequired(false);
-            builder.Property(x => x.SpecialNotes).IsRequired(false);
             builder.Property(x => x.Subtotal).IsRequired(false);
             builder.Property(x => x.Discount).IsRequired(false);
             builder.Property(x => x.VoucherDiscount).IsRequired(false);
@@ -27,40 +24,6 @@ namespace DigiBite_Core.EntityTypeConfigurations.EntityConfiguration
             builder.Property(x => x.VoucherId).IsRequired(false);
 
 
-            //String Max Length
-            builder.Property(x => x.SpecialNotes).HasMaxLength(256);
-
         }
     }
-
-
-    //public class CtegoryConfiguration : IEntityTypeConfiguration<Category>
-    //{
-    //    public void Configure(EntityTypeBuilder<Category> builder)
-    //    {
-
-    //        //Foreign key 
-    //        builder.HasMany<AgentTransaction>().WithOne().HasForeignKey(x => x.AgentId);
-
-
-    //        //Nullable(is Not Null By Default) and Default value Config
-
-    //        builder.Property(x => x.LastModifiedDateTime).HasDefaultValue(DateTime.Now);
-    //        builder.Property(x => x.CreatedBy).IsRequired(true);
-
-
-    //        //UNIQUE
-    //        builder.HasIndex(x => x.Phone).IsUnique(true);
-
-
-    //        //Check Constraint
-    //        builder.ToTable(x =>
-    //        x.HasCheckConstraint("CH_User_Name", "Name NOT LIKE '%[^a-zA-Z ]%' AND LEN(Name) > 5"));
-
-
-    //        //String Max Length
-    //        builder.Property(x => x.Name).HasMaxLength(50);
-
-    //    }
-    //}
 }

@@ -39,7 +39,7 @@ namespace DigiBite_Infra.Repos
                                            {
                                                Id = ingred.Id,
                                                Name = LanguageService.SelectLang(ingred.Name, ingred.NameEn),
-                                               IngredientUnit = ingred.Unit.ToString(),
+                                               IngredientUnit = itemIngred.Unit.ToString(),
                                                QTY = itemIngred.QTY
                                            }).ToList(),
 
@@ -85,7 +85,7 @@ namespace DigiBite_Infra.Repos
                                            {
                                                Id = ing.Id,
                                                Name = LanguageService.SelectLang(ing.Name, ing.NameEn),
-                                               IngredientUnit = ing.Unit.ToString(),
+                                               IngredientUnit = itemIng.Unit.ToString(),
                                                QTY = itemIng.QTY,
                                                ImageUrl = (from img in context.Medias
                                                            where ing.ImageId == img.Id

@@ -20,6 +20,8 @@ namespace DigiBite_Api.Configurations
             services.AddScoped<IMealService, MealService>();
             services.AddScoped<ICategoryRepos, CategoryRepos>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IIngredientService, IngredientService>();
+            services.AddScoped<IIngredientRepos, IngredientRepos>();
 
         }
     }

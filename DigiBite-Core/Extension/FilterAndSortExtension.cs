@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace DigiBite_Core.Extension
@@ -8,35 +9,37 @@ namespace DigiBite_Core.Extension
         public static IQueryable<T> ApplyFilterAndSort<T>(this IQueryable<T> query, Dictionary<string, string> filters, string sortBy = null, bool isDescending = false)
         {
             // Apply filtering
-            foreach (var filter in filters)
+            if (!filters.IsNullOrEmpty())
             {
-                var propertyInfo = typeof(T).GetProperty(filter.Key.Split(':')[0], BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-                if (propertyInfo == null) continue;
-
-                var operatorType = filter.Key.Contains(":") ? filter.Key.Split(':')[1] : "eq";
-                var parameter = Expression.Parameter(typeof(T), "x");
-                var property = Expression.Property(parameter, propertyInfo);
-                var value = Expression.Constant(Convert.ChangeType(filter.Value, propertyInfo.PropertyType));
-
-                Expression comparison;
-                switch (operatorType)
+                foreach (var filter in filters)
                 {
-                    case "gt": // Greater than
-                        comparison = Expression.GreaterThan(property, value);
-                        break;
-                    case "lt": // Less than
-                        comparison = Expression.LessThan(property, value);
-                        break;
-                    case "eq": // Equal
-                    default:
-                        comparison = Expression.Equal(property, value);
-                        break;
+                    var propertyInfo = typeof(T).GetProperty(filter.Key.Split(':')[0], BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+                    if (propertyInfo == null) continue;
+
+                    var operatorType = filter.Key.Contains(":") ? filter.Key.Split(':')[1] : "eq";
+                    var parameter = Expression.Parameter(typeof(T), "x");
+                    var property = Expression.Property(parameter, propertyInfo);
+                    var value = Expression.Constant(Convert.ChangeType(filter.Value, propertyInfo.PropertyType));
+
+                    Expression comparison;
+                    switch (operatorType)
+                    {
+                        case "gt": // Greater than
+                            comparison = Expression.GreaterThan(property, value);
+                            break;
+                        case "lt": // Less than
+                            comparison = Expression.LessThan(property, value);
+                            break;
+                        case "eq": // Equal
+                        default:
+                            comparison = Expression.Equal(property, value);
+                            break;
+                    }
+
+                    var lambda = Expression.Lambda<Func<T, bool>>(comparison, parameter);
+                    query = query.Where(lambda);
                 }
-
-                var lambda = Expression.Lambda<Func<T, bool>>(comparison, parameter);
-                query = query.Where(lambda);
             }
-
             // Apply sorting if sortBy is provided
             if (!string.IsNullOrEmpty(sortBy))
             {

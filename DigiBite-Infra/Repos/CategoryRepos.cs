@@ -16,7 +16,7 @@ namespace DigiBite_Infra.Repos
                         select new CategoryDTO
                         {
                             Id = cat.Id,
-                            Name = cat.Name,
+                            Name = LanguageService.SelectLang(cat.Name, cat.NameEn),
                             ImageUrl = (from img in context.Medias
                                         where img.Id == cat.ImageId
                                         select img.ImageUrl).FirstOrDefault()

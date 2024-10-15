@@ -1,4 +1,6 @@
-﻿namespace DigiBite_Core.DTOs.Ingredient
+﻿using DigiBite_Core.Constant;
+
+namespace DigiBite_Core.DTOs.Ingredient
 {
     public class IngredientsWithImageDTO
     {

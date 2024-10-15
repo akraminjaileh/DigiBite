@@ -14,11 +14,8 @@ namespace DigiBite_Core.EntityTypeConfigurations.EntityConfiguration
             //Foreign key 
             builder.HasOne<Entities.Lookups.Media>().WithOne().HasForeignKey<Ingredient>(x => x.ImageId);
 
-
             //Nullable(is Not Null By Default) and Default value Config
             builder.Property(x=>x.ImageId).IsRequired(false);
-            builder.Property(x => x.Unit).HasDefaultValue(IngredientUnit.Pieces);
-
 
             //String Max Length
             builder.Property(x => x.Name).HasMaxLength(50);

@@ -52,7 +52,7 @@ namespace DigiBite_Infra.Services
                 cat.Description = input.Description ?? cat.Description;
                 cat.DescriptionEn = input.DescriptionEn ?? cat.DescriptionEn;
                 cat.LastModifiedBy = lastModifiedBy;
-                cat.LastModifiedDateTime = DateTime.UtcNow;
+                cat.LastModifiedDateTime = DateTime.Now;
 
                 return await command.UpdateAsync(cat);
 
@@ -73,7 +73,7 @@ namespace DigiBite_Infra.Services
                 throw new Exception("Category not found");
 
             cat.LastModifiedBy = lastModifiedBy;
-            cat.LastModifiedDateTime = DateTime.UtcNow;
+            cat.LastModifiedDateTime = DateTime.Now;
             cat.ImageId = imageId;
             return await command.UpdateAsync(cat);
 
@@ -87,7 +87,7 @@ namespace DigiBite_Infra.Services
 
                 cat.IsActive = false;
                 cat.LastModifiedBy = modifiedBy;
-                cat.LastModifiedDateTime = DateTime.UtcNow;
+                cat.LastModifiedDateTime = DateTime.Now;
 
                 return await command.UpdateAsync(cat);
 

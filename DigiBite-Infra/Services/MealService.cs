@@ -103,7 +103,7 @@ namespace DigiBite_Infra.Services
                 meal.Price = input.Price ?? meal.Price;
                 meal.CategoryId = input.CategoryId ?? meal.CategoryId;
                 meal.LastModifiedBy = lastModifiedBy;
-                meal.LastModifiedDateTime = DateTime.UtcNow;
+                meal.LastModifiedDateTime = DateTime.Now;
 
                 var result = await command.UpdateAsync(meal);
 
@@ -186,7 +186,7 @@ namespace DigiBite_Infra.Services
                 throw new Exception("Meal not found");
 
             meal.LastModifiedBy = lastModifiedBy;
-            meal.LastModifiedDateTime = DateTime.UtcNow;
+            meal.LastModifiedDateTime = DateTime.Now;
 
             var mediaMeal = new List<MediaItem>();
             foreach (var input in inputs)
@@ -232,7 +232,7 @@ namespace DigiBite_Infra.Services
             var meal = await query.GetEntityAsync<Meal>(x => x.Id == mealId);
             meal.IsActive = false;
             meal.LastModifiedBy = lastModifiedBy;
-            meal.LastModifiedDateTime = DateTime.UtcNow;
+            meal.LastModifiedDateTime = DateTime.Now;
             return await command.UpdateAsync(meal);
         }
 
@@ -243,7 +243,7 @@ namespace DigiBite_Infra.Services
             {
                 meal.IsActive = false;
                 meal.LastModifiedBy = lastModifiedBy;
-                meal.LastModifiedDateTime = DateTime.UtcNow;
+                meal.LastModifiedDateTime = DateTime.Now;
             }
 
             return await command.UpdateRangAsync(meals);

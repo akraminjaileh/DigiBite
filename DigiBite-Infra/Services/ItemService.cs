@@ -102,7 +102,7 @@ namespace DigiBite_Infra.Services
                 item.Price = input.Price ?? item.Price;
                 item.CategoryId = input.CategoryId ?? item.CategoryId;
                 item.LastModifiedBy = lastModifiedBy;
-                item.LastModifiedDateTime = DateTime.UtcNow;
+                item.LastModifiedDateTime = DateTime.Now;
 
                 var result = await command.UpdateAsync(item);
 
@@ -185,7 +185,7 @@ namespace DigiBite_Infra.Services
                 throw new Exception("Item not found");
 
             item.LastModifiedBy = lastModifiedBy;
-            item.LastModifiedDateTime = DateTime.UtcNow;
+            item.LastModifiedDateTime = DateTime.Now;
 
             var mediaItem = new List<MediaItem>();
             foreach (var input in inputs)
@@ -231,7 +231,7 @@ namespace DigiBite_Infra.Services
             var item = await query.GetEntityAsync<Item>(x => x.Id == itemId);
             item.IsActive = false;
             item.LastModifiedBy = lastModifiedBy;
-            item.LastModifiedDateTime = DateTime.UtcNow;
+            item.LastModifiedDateTime = DateTime.Now;
             return await command.UpdateAsync(item);
         }
 
@@ -242,7 +242,7 @@ namespace DigiBite_Infra.Services
             {
                 item.IsActive = false;
                 item.LastModifiedBy = lastModifiedBy;
-                item.LastModifiedDateTime = DateTime.UtcNow;
+                item.LastModifiedDateTime = DateTime.Now;
             }
 
             return await command.UpdateRangAsync(items);

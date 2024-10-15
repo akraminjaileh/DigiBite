@@ -354,7 +354,7 @@ namespace DigiBite_Api.Controllers
                 user.LastName = input.LastName ?? user.LastName;
                 user.PhoneNumber = input.PhoneNumber ?? user.PhoneNumber;
                 user.DateOfBirth = input.DateOfBirth ?? user.DateOfBirth;
-                user.LastModifiedDateTime = DateTime.UtcNow;
+                user.LastModifiedDateTime = DateTime.Now;
 
                 var result = await userManager.UpdateAsync(user);
 
@@ -399,7 +399,7 @@ namespace DigiBite_Api.Controllers
 
                 var image = await mediaService.UploadFile(file, user.Id);
                 user.ProfileImgId = image.Id;
-                user.LastModifiedDateTime = DateTime.UtcNow;
+                user.LastModifiedDateTime = DateTime.Now;
 
                 if (temp != 0)
                     await mediaService.RemoveFile(temp);
