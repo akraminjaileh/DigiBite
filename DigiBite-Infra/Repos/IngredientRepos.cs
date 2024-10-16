@@ -10,7 +10,7 @@ namespace DigiBite_Infra.Repos
     public class IngredientRepos(DigiBiteContext context) : IIngredientRepos
     {
 
-        public async Task<IEnumerable<IngredientsWithImageDTO>> GetIngredients(
+        public async Task<IEnumerable<IngredientsDTO>> GetIngredients(
             int skip, int take,
             string sortBy = null, bool isDescending = false)
         {
@@ -19,7 +19,7 @@ namespace DigiBite_Infra.Repos
                         .ApplyFilterAndSort(null, sortBy, isDescending)
                         .Skip(skip)
                         .Take(take > 0 ? take : 20)
-                        select new IngredientsWithImageDTO
+                        select new IngredientsDTO
                         {
                             Id = ing.Id,
                             Name = LanguageService.SelectLang(ing.Name, ing.NameEn),
@@ -30,11 +30,11 @@ namespace DigiBite_Infra.Repos
             return await query.ToListAsync();
         }
 
-        public async Task<IngredientsWithImageDTO> GetIngredientById(int id)
+        public async Task<IngredientsDTO> GetIngredientById(int id)
         {
             var query = from ing in context.Ingredients
-                        where ing.IsActive == true
-                        select new IngredientsWithImageDTO
+                        where ing.Id == id && ing.IsActive == true
+                        select new IngredientsDTO
                         {
                             Id = ing.Id,
                             Name = LanguageService.SelectLang(ing.Name, ing.NameEn),

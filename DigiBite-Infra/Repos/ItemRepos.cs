@@ -35,7 +35,7 @@ namespace DigiBite_Infra.Repos
                                            join ingred in context.Ingredients
                                            on itemIngred.IngredientId equals ingred.Id
                                            where itemIngred.ItemId == item.Id
-                                           select new IngredientsDTO
+                                           select new IngredientsWithDetailsDTO
                                            {
                                                Id = ingred.Id,
                                                Name = LanguageService.SelectLang(ingred.Name, ingred.NameEn),

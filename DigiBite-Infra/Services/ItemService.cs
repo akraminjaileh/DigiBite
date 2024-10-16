@@ -1,4 +1,5 @@
-﻿using DigiBite_Core.DTOs.Item;
+﻿using DigiBite_Core.Constant;
+using DigiBite_Core.DTOs.Item;
 using DigiBite_Core.Entities.ManyToMany;
 using DigiBite_Core.IRepos;
 using DigiBite_Core.IServices;
@@ -49,6 +50,7 @@ namespace DigiBite_Infra.Services
                                 IngredientId = ing.IngredientId,
                                 ItemId = item.Id,
                                 QTY = ing.QTY,
+                                Unit = Enum.Parse<IngredientUnit>(ing.Unit)
                             });
                     }
 
@@ -118,6 +120,7 @@ namespace DigiBite_Infra.Services
                                 IngredientId = ing.IngredientId,
                                 ItemId = item.Id,
                                 QTY = ing.QTY,
+                                Unit = Enum.Parse<IngredientUnit>(ing.Unit)
                             });
                     }
 

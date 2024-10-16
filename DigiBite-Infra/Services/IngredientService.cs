@@ -1,5 +1,4 @@
-﻿using DigiBite_Core.Constant;
-using DigiBite_Core.DTOs.Ingredient;
+﻿using DigiBite_Core.DTOs.Ingredient;
 using DigiBite_Core.IRepos;
 using DigiBite_Core.IServices;
 using DigiBite_Core.Models.Entities;
@@ -8,11 +7,11 @@ namespace DigiBite_Infra.Services
 {
     public class IngredientService(IIngredientRepos repos, ICommandRepos command, IQueryRepos query) : IIngredientService
     {
-        public async Task<IEnumerable<IngredientsWithImageDTO>> GetIngredients(int skip, int take,
+        public async Task<IEnumerable<IngredientsDTO>> GetIngredients(int skip, int take,
             string sortBy = null, bool isDescending = false)
                  => await repos.GetIngredients(skip, take, sortBy, isDescending);
 
-        public async Task<IngredientsWithImageDTO> GetIngredientDetails(int id)
+        public async Task<IngredientsDTO> GetIngredientDetails(int id)
                => await repos.GetIngredientById(id);
 
         public async Task<int> AddIngredient(AddIngredientDTO input, string createdBy)
@@ -91,7 +90,7 @@ namespace DigiBite_Infra.Services
 
         public async Task<int> BulkRemoveIngredient(List<int> ingId, string lastModifiedBy)
         {
-            var ingredients = await query.GetEntitiesAsync<Item>(x => ingId.Contains(x.Id));
+            var ingredients = await query.GetEntitiesAsync<Ingredient>(x => ingId.Contains(x.Id));
             foreach (var ing in ingredients)
             {
                 ing.IsActive = false;

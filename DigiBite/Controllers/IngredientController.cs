@@ -18,7 +18,7 @@ namespace DigiBite_Api.Controllers
         /// </summary>
         /// <response code="200">Ingredients retrieved successfully.</response>
         /// <response code="400">Bad request.</response>
-        [ProducesResponseType(typeof(ApiResponseSwagger<List<IngredientsWithImageDTO>>), 200)]
+        [ProducesResponseType(typeof(ApiResponseSwagger<List<IngredientsDTO>>), 200)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
         [HttpGet]
         [Route("")]
@@ -42,7 +42,7 @@ namespace DigiBite_Api.Controllers
         /// <response code="200">Ingredient retrieved successfully.</response>
         /// <response code="404">No Ingredient found.</response>
         /// <response code="400">Bad request.</response>
-        [ProducesResponseType(typeof(ApiResponseSwagger<IngredientsWithImageDTO>), 200)]
+        [ProducesResponseType(typeof(ApiResponseSwagger<IngredientsDTO>), 200)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 404)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
         [HttpGet]
