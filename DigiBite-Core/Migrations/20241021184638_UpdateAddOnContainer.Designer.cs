@@ -4,6 +4,7 @@ using DigiBite_Core.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigiBite_Core.Migrations
 {
     [DbContext(typeof(DigiBiteContext))]
-    partial class DigiBiteContextModelSnapshot : ModelSnapshot
+    [Migration("20241021184638_UpdateAddOnContainer")]
+    partial class UpdateAddOnContainer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,7 +78,9 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("AddOnContainerId");
 
-                    b.HasIndex("ImageId");
+                    b.HasIndex("ImageId")
+                        .IsUnique()
+                        .HasFilter("[ImageId] IS NOT NULL");
 
                     b.ToTable("AddOns");
                 });
@@ -635,7 +640,9 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.HasIndex("ImageId");
+                    b.HasIndex("ImageId")
+                        .IsUnique()
+                        .HasFilter("[ImageId] IS NOT NULL");
 
                     b.ToTable("Categories", t =>
                         {
@@ -688,7 +695,9 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.HasIndex("ImageId");
+                    b.HasIndex("ImageId")
+                        .IsUnique()
+                        .HasFilter("[ImageId] IS NOT NULL");
 
                     b.ToTable("Ingredients");
                 });
@@ -1230,8 +1239,8 @@ namespace DigiBite_Core.Migrations
                         .IsRequired();
 
                     b.HasOne("DigiBite_Core.Entities.Lookups.Media", null)
-                        .WithMany()
-                        .HasForeignKey("ImageId");
+                        .WithOne()
+                        .HasForeignKey("DigiBite_Core.Entities.Lookups.AddOn", "ImageId");
                 });
 
             modelBuilder.Entity("DigiBite_Core.Entities.Lookups.EmployeeDocument", b =>
@@ -1332,8 +1341,8 @@ namespace DigiBite_Core.Migrations
                         .IsRequired();
 
                     b.HasOne("DigiBite_Core.Entities.Lookups.Media", null)
-                        .WithMany()
-                        .HasForeignKey("ImageId");
+                        .WithOne()
+                        .HasForeignKey("DigiBite_Core.Models.Entities.Category", "ImageId");
                 });
 
             modelBuilder.Entity("DigiBite_Core.Models.Entities.Ingredient", b =>
@@ -1345,8 +1354,8 @@ namespace DigiBite_Core.Migrations
                         .IsRequired();
 
                     b.HasOne("DigiBite_Core.Entities.Lookups.Media", null)
-                        .WithMany()
-                        .HasForeignKey("ImageId");
+                        .WithOne()
+                        .HasForeignKey("DigiBite_Core.Models.Entities.Ingredient", "ImageId");
                 });
 
             modelBuilder.Entity("DigiBite_Core.Models.Entities.Item", b =>

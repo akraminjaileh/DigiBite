@@ -14,10 +14,10 @@ namespace DigiBite_Core.EntityTypeConfigurations.LookupConfiguration
             builder.Property(x => x.Id).UseIdentityColumn();
 
             //Foreign key 
-            builder.HasOne<Ingredient>().WithOne().HasForeignKey<Ingredient>(x => x.ImageId);
-            builder.HasOne<AddOn>().WithOne().HasForeignKey<AddOn>(x => x.ImageId);
+            builder.HasMany<Ingredient>().WithOne().HasForeignKey(x => x.ImageId);
+            builder.HasMany<AddOn>().WithOne().HasForeignKey(x => x.ImageId);
+            builder.HasMany<Category>().WithOne().HasForeignKey(x => x.ImageId);
             builder.HasOne<AppUser>().WithOne().HasForeignKey<AppUser>(x => x.ProfileImgId);
-            builder.HasOne<Category>().WithOne().HasForeignKey<Category>(x => x.ImageId);
 
             //Nullable(is Not Null By Default) and Default value Config
             builder.Property(x => x.AltText).HasDefaultValue("FoodPhoto");

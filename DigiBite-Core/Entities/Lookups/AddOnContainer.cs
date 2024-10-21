@@ -1,8 +1,9 @@
-﻿namespace DigiBite_Core.Entities.Lookups
+﻿using DigiBite_Core.Models.SharedEntity;
+
+namespace DigiBite_Core.Entities.Lookups
 {
-    public class AddOnContainer
+    public class AddOnContainer : Parent
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string NameEn { get; set; }
     }
