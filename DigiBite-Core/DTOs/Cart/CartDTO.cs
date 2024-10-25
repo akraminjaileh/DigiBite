@@ -1,8 +1,10 @@
 ﻿using DigiBite_Core.Constant;
+using DigiBite_Core.DTOs.CartItem;
+using DigiBite_Core.DTOs.CartItemAddon;
 
-namespace DigiBite_Core.Models.Entities
+namespace DigiBite_Core.DTOs.Cart
 {
-    public class Cart
+    public class CartDTO
     {
         public int Id { get; set; }
         public CartStatus CartStatus { get; set; } //"Active", "Ordered"
@@ -12,12 +14,8 @@ namespace DigiBite_Core.Models.Entities
         public decimal? DeliveryFee { get; set; }
         public decimal? ServiceFee { get; set; }
         public decimal? TotalAmount { get; set; }
-        public string UserId { get; set; }
-        public DateTime CreatedAt { get; set; }
-
-
-        //Relationships
         public int? VoucherId { get; set; }
+        public List<CartItemDTO> CartItems { get; set; }
 
     }
 }

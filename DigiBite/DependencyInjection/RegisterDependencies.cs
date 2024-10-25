@@ -24,6 +24,8 @@ namespace DigiBite_Api.Configurations
             services.AddScoped<IIngredientRepos, IngredientRepos>();
             services.AddScoped<IAddOnService, AddOnService>();
             services.AddScoped<IAddOnRepos, AddOnRepos>();
+            services.AddScoped<ICustomerActionRepos, CustomerActionRepos>();
+            services.AddScoped<ICustomerActionService, CustomerActionService>();
 
         }
     }

@@ -3,7 +3,6 @@
     public enum CartStatus
     {
         Active = 120,
-        Ordered,
-        Abandoned
+        Ordered
     }
 }

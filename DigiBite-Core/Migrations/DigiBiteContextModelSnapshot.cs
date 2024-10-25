@@ -77,7 +77,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.ToTable("AddOns");
+                    b.ToTable("AddOns", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Entities.Lookups.AddOnContainer", b =>
@@ -120,7 +120,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AddOnContainers");
+                    b.ToTable("AddOnContainers", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Entities.Lookups.EmployeeDocument", b =>
@@ -175,7 +175,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("EmployeeInformationId");
 
-                    b.ToTable("EmployeeDocuments");
+                    b.ToTable("EmployeeDocuments", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Entities.Lookups.EmployeeInformation", b =>
@@ -235,7 +235,7 @@ namespace DigiBite_Core.Migrations
                         .IsUnique()
                         .HasFilter("[IBAN] IS NOT NULL");
 
-                    b.ToTable("EmployeeInformation");
+                    b.ToTable("EmployeeInformation", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Entities.Lookups.Media", b =>
@@ -281,7 +281,7 @@ namespace DigiBite_Core.Migrations
                     b.HasIndex("ImageUrl")
                         .IsUnique();
 
-                    b.ToTable("Medias");
+                    b.ToTable("Medias", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Entities.ManyToMany.AddOnItemMeal", b =>
@@ -309,7 +309,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("MealId");
 
-                    b.ToTable("AddOnItemMeals");
+                    b.ToTable("AddOnItemMeals", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Entities.ManyToMany.CartItem", b =>
@@ -347,7 +347,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("MealId");
 
-                    b.ToTable("CartItems", t =>
+                    b.ToTable("CartItems", null, t =>
                         {
                             t.HasCheckConstraint("CH_CartItem_Quantity", "Quantity > 0");
                         });
@@ -368,7 +368,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("CartItemId");
 
-                    b.ToTable("CartItemAddons");
+                    b.ToTable("CartItemAddons", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Entities.ManyToMany.MediaItem", b =>
@@ -399,7 +399,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("MealId");
 
-                    b.ToTable("MediaItems");
+                    b.ToTable("MediaItems", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Models.Entities.AppUser", b =>
@@ -582,7 +582,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Carts");
+                    b.ToTable("Carts", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Models.Entities.Category", b =>
@@ -637,7 +637,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.ToTable("Categories", t =>
+                    b.ToTable("Categories", null, t =>
                         {
                             t.HasCheckConstraint("CH_Category_Name", "LEN(Name) > 2");
                         });
@@ -690,7 +690,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.ToTable("Ingredients");
+                    b.ToTable("Ingredients", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Models.Entities.Item", b =>
@@ -761,7 +761,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("Items");
+                    b.ToTable("Items", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Models.Entities.Meal", b =>
@@ -830,7 +830,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("Meals");
+                    b.ToTable("Meals", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Models.Entities.Order", b =>
@@ -894,7 +894,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Models.Lookups.Address", b =>
@@ -955,7 +955,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("DigiBite_Core.Models.Lookups.Voucher", b =>
@@ -1015,7 +1015,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("Vouchers", t =>
+                    b.ToTable("Vouchers", null, t =>
                         {
                             t.HasCheckConstraint("CH_Voucher_ExpirationDate", "ExpirationDate > ScheduleStartDate");
 
@@ -1043,7 +1043,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("ItemId");
 
-                    b.ToTable("ItemIngredients", t =>
+                    b.ToTable("ItemIngredients", null, t =>
                         {
                             t.HasCheckConstraint("CH_ItemIngredient_QTY", "QTY > 0");
                         });
@@ -1064,7 +1064,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("MealId");
 
-                    b.ToTable("ItemMeals", t =>
+                    b.ToTable("ItemMeals", null, t =>
                         {
                             t.HasCheckConstraint("CH_ItemMeal_QTY", "QTY > 0");
                         });
@@ -1085,7 +1085,7 @@ namespace DigiBite_Core.Migrations
 
                     b.HasIndex("VoucherId");
 
-                    b.ToTable("VoucherUsers");
+                    b.ToTable("VoucherUsers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
