@@ -397,7 +397,7 @@ namespace DigiBite_Api.Controllers
                     return BadRequest("User not found.");
                 var temp = user.ProfileImgId ?? 0;
 
-                var image = await mediaService.UploadFile(file, user.Id);
+                var image = await mediaService.UploadProfileImage(file, user.Id);
                 user.ProfileImgId = image.Id;
                 user.LastModifiedDateTime = DateTime.Now;
 

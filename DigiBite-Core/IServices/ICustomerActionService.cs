@@ -1,6 +1,7 @@
 ﻿using DigiBite_Core.DTOs.Address;
 using DigiBite_Core.DTOs.Cart;
 using DigiBite_Core.DTOs.CartItem;
+using DigiBite_Core.DTOs.Order;
 using DigiBite_Core.DTOs.Voucher;
 
 namespace DigiBite_Core.IServices
@@ -18,5 +19,10 @@ namespace DigiBite_Core.IServices
         Task<int> RemoveFromCart(int cartItemId);
         Task<List<VoucherUserDTO>> GetUserVoucher(string userId);
         Task<int> ApplyVoucher(string userId, int voucherId);
+        Task<int> RemoveVoucher(string userId, int voucherId);
+        Task<IEnumerable<OrdersByDateDTO>> GetOrders(string userId);
+        Task<OrderDetailsDTO> GetOrderDetails(int id);
+        Task<int> Checkout(CheckoutDTO input, string userId);
+        Task<int> UpdateQuantity(int cartItemId, int qty);
     }
 }

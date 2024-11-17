@@ -1,7 +1,6 @@
 ﻿using DigiBite_Core.Context;
 using DigiBite_Core.IRepos;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using System.Linq.Expressions;
 
 namespace DigiBite_Infra.Repos
@@ -26,7 +25,6 @@ namespace DigiBite_Infra.Repos
                 throw new Exception(ex.Message);
             }
         }
-
         public async Task<List<T>> GetEntitiesAsync<T>(Expression<Func<T, bool>> predicate) where T : class
         {
 

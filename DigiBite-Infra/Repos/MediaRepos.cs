@@ -1,5 +1,6 @@
 ﻿using DigiBite_Core.Constant;
 using DigiBite_Core.Context;
+using DigiBite_Core.DTOs.Media;
 using DigiBite_Core.Entities.Lookups;
 using DigiBite_Core.IRepos;
 using Microsoft.AspNetCore.Http;
@@ -11,7 +12,53 @@ namespace DigiBite_Infra.Repos
     public class MediaRepos(DigiBiteContext context) : IMediaRepos
     {
 
-        public async Task<List<Media>> UploadFiles(IFormFileCollection files, string uploadedBy)
+        public async Task<List<MediasDTO>> GetFiles(int skip, int take)
+        {
+            try
+            {
+                var query = from m in context.Medias
+                            .Skip(skip).Take(take == 0 ? 20 : take)
+                             orderby m.UploadedOn descending
+                            select new MediasDTO
+                            {
+                                Id = m.Id,
+                                FileName = m.FileName,
+                                ImageUrl = m.ImageUrl,
+                                AltText = m.AltText,
+                                SizeKB = m.SizeKB,
+                                FileType = m.FileType.ToString(),
+                                UploadedBy = m.UploadedBy,
+                                UploadedOn = m.UploadedOn
+                            };
+                return await query.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<string> GetFileUrlById(int id)
+        {
+            try
+            {
+                var file = await context.Medias.FirstOrDefaultAsync(x => x.Id == id);
+                if (file == null)
+                {
+                    return string.Empty;
+                }
+
+                return file.ImageUrl;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception($"An error occurred while getting the file: {ex.Message}", ex);
+            }
+        }
+
+        public async Task<int> UploadFiles(IFormFileCollection files, string uploadedBy)
         {
 
             var transaction = await context.Database.BeginTransactionAsync();
@@ -70,10 +117,10 @@ namespace DigiBite_Infra.Repos
                 }
 
                 context.Medias.AddRange(fileList);
-                await context.SaveChangesAsync();
+                var result = await context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                return fileList;
+                return result;
 
             }
             catch (IOException ioEx)
@@ -90,7 +137,87 @@ namespace DigiBite_Infra.Repos
         }
 
 
-        public async Task<Media> UploadFile(IFormFile file, string uploadedBy)
+        public async Task<int> RemoveFile(int id)
+        {
+
+            try
+            {
+                var file = await context.Medias.FirstOrDefaultAsync(x => x.Id == id);
+                if (file == null)
+                {
+                    return 0;
+                }
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads", file.ImageUrl);
+
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+
+                context.Medias.Remove(file);
+                return await context.SaveChangesAsync();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception($"An error occurred while removing the file: {ex.Message}", ex);
+            }
+        }
+
+        public async Task<int> BulkRemoveFile(List<int> ids)
+        {
+
+            try
+            {
+                var files = await context.Medias
+                 .Where(x => ids.Contains(x.Id))
+                 .ToListAsync();
+
+                if (files.IsNullOrEmpty())
+                {
+                    return 0;
+                }
+
+                foreach (var file in files)
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads", file.ImageUrl);
+
+                    if (File.Exists(filePath))
+                    {
+                        File.Delete(filePath);
+                    }
+                }
+                context.Medias.RemoveRange(files);
+                return await context.SaveChangesAsync();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception($"An error occurred while removing the file: {ex.Message}", ex);
+            }
+        }
+
+
+        public async Task<int> UpdateFile(int id, MediaUpdateDTO input)
+        {
+            try
+            {
+                var file = await context.Medias.FirstOrDefaultAsync(x => x.Id == id);
+                if (file == null) throw new Exception("File Not Found");
+                file.FileName = input.FileName ?? file.FileName;
+                file.AltText = input.AltText ?? file.AltText;
+                context.Update(file);
+                return await context.SaveChangesAsync();
+            }
+            catch (Exception ex) { throw new Exception(ex.Message); }
+        }
+
+
+        //User Profile Image
+        public async Task<Media> UploadProfileImage(IFormFile file, string uploadedBy)
         {
 
             var transaction = await context.Database.BeginTransactionAsync();
@@ -142,7 +269,6 @@ namespace DigiBite_Infra.Repos
                     UploadedBy = uploadedBy
                 };
 
-
                 context.Medias.Add(media);
                 await context.SaveChangesAsync();
                 await transaction.CommitAsync();
@@ -163,56 +289,6 @@ namespace DigiBite_Infra.Repos
 
         }
 
-
-        public async Task RemoveFile(int id)
-        {
-
-            try
-            {
-                var file = await context.Medias.FirstOrDefaultAsync(x => x.Id == id);
-                if (file == null)
-                {
-                    return;
-                }
-
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads", file.ImageUrl);
-
-                if (File.Exists(filePath))
-                {
-                    File.Delete(filePath);
-                }
-
-                context.Medias.Remove(file);
-                await context.SaveChangesAsync();
-
-            }
-            catch (Exception ex)
-            {
-
-                throw new Exception($"An error occurred while removing the file: {ex.Message}", ex);
-            }
-        }
-
-
-        public async Task<string> GetFileUrlById(int id)
-        {
-            try
-            {
-                var file = await context.Medias.FirstOrDefaultAsync(x => x.Id == id);
-                if (file == null)
-                {
-                    return string.Empty;
-                }
-
-                return file.ImageUrl;
-
-            }
-            catch (Exception ex)
-            {
-
-                throw new Exception($"An error occurred while getting the file: {ex.Message}", ex);
-            }
-        }
 
     }
 }

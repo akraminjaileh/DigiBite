@@ -2,6 +2,7 @@
 using DigiBite_Core.DTOs.Address;
 using DigiBite_Core.DTOs.Cart;
 using DigiBite_Core.DTOs.CartItem;
+using DigiBite_Core.DTOs.Order;
 using DigiBite_Core.DTOs.Voucher;
 using DigiBite_Core.Entities.ManyToMany;
 using DigiBite_Core.IRepos;
@@ -9,6 +10,7 @@ using DigiBite_Core.IServices;
 using DigiBite_Core.Models.Entities;
 using DigiBite_Core.Models.Lookups;
 using DigiBite_Core.Models.ManyToMany;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DigiBite_Infra.Services
 {
@@ -35,6 +37,7 @@ namespace DigiBite_Infra.Services
                     ApartmentNumber = input.ApartmentNumber,
                     BuildingName = input.BuildingName,
                     IsPrimary = input.IsPrimary,
+                    IsActive = true,
                     Latitude = input.Latitude,
                     Longitude = input.Longitude,
                     UserId = userId
@@ -118,7 +121,7 @@ namespace DigiBite_Infra.Services
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<int> UpdateCart(int cartId)
+        private async Task<int> UpdateCart(int cartId)
         {
             try
             {
@@ -132,12 +135,13 @@ namespace DigiBite_Infra.Services
                 return await command.UpdateAsync(cart);
 
             }
-            catch (Exception ex) { new Exception(ex.Message); }
+            catch (Exception ex) { throw new Exception(ex.Message); }
         }
+
         #endregion
 
         public async Task<CartDTO> GetActiveCart(string userId)
-       => await repos.GetActiveCart(userId);
+       => await repos.GetCartDetails(x => x.UserId == userId && x.CartStatus == CartStatus.Active);
 
         public async Task<int> AddToCart(AddToCartDTO input, string userId)
         {
@@ -176,7 +180,53 @@ namespace DigiBite_Infra.Services
 
                 cartItem.Quantity = input.Quantity;
                 cartItem.SpecialNotes = input.SpecialNotes;
+
+                var cartItems = await query.GetEntitiesAsync<CartItem>(
+                       x =>
+                       x.CartId == cartItem.CartId
+                       && x.ItemPrice == cartItem.ItemPrice
+                       && ((x.ItemId == input.ItemId) || (x.MealId == input.MealId))
+                       && x.SpecialNotes.Equals(input.SpecialNotes));
+                if (!cartItems.IsNullOrEmpty())
+                {
+                    foreach (var ci in cartItems)
+                    {
+                        if (input.CartItemAddonIDs != null && input.CartItemAddonIDs.All(x => x > 0))
+                        {
+                            var cartItemAddon = await query.GetEntitiesAsync<CartItemAddon>(x => x.CartItemId == ci.Id);
+                            bool idsMatch = cartItemAddon.All(x => input.CartItemAddonIDs.Contains(x.AddonId))
+                                && input.CartItemAddonIDs.All(id => cartItemAddon.Any(x => x.AddonId == id));
+
+                            if (idsMatch)
+                            {
+                                var result1 = await UpdateQuantity(ci.Id, input.Quantity + ci.Quantity);
+                                await transaction.CommitAsync();
+                                return result1;
+                            }
+                        }
+                        else
+                        {
+                            var result2 = await UpdateQuantity(ci.Id, input.Quantity + ci.Quantity);
+                            await transaction.CommitAsync();
+                            return result2;
+                        }
+                    }
+                }
                 var result = await command.AddAsync(cartItem);
+                var cartItemAddons = new List<CartItemAddon>();
+                if (input.CartItemAddonIDs != null && input.CartItemAddonIDs.All(x => x > 0))
+                {
+
+                    foreach (var AddonId in input.CartItemAddonIDs)
+                        cartItemAddons.Add(new CartItemAddon
+                        {
+                            CartItemId = cartItem.Id,
+                            AddonId = AddonId,
+                            AddonPrice = await repos.GetAddonPrice(AddonId)
+                        });
+
+                    await command.AddRangAsync(cartItemAddons);
+                }
                 await UpdateCart(cartItem.CartId);
                 await transaction.CommitAsync();
                 return result;
@@ -194,8 +244,13 @@ namespace DigiBite_Infra.Services
             var transaction = await command.BeginTransactionAsync();
             try
             {
+                if (await repos.isCartOrdered(cartItemId))
+                    throw new Exception("The cart has already been checked out and cannot be changed.");
+
                 var cartItem = await query.GetEntityAsync<CartItem>(x => x.Id == cartItemId);
-                var cartId = cartItem.Id;
+                var cartId = cartItem.CartId;
+                var cartItemAddons = await query.GetEntitiesAsync<CartItemAddon>(x => x.CartItemId == cartItem.Id);
+                await command.RemoveRangPermanentlyAsync(cartItemAddons);
                 var result = await command.RemovePermanentlyAsync(cartItem);
                 await UpdateCart(cartId);
                 await transaction.CommitAsync();
@@ -208,11 +263,30 @@ namespace DigiBite_Infra.Services
             }
         }
 
+        public async Task<int> UpdateQuantity(int cartItemId, int qty)
+        {
+            try
+            {
+                if (await repos.isCartOrdered(cartItemId))
+                    throw new Exception("The cart has already been checked out and cannot be changed.");
+
+                var cartItem = await query.GetEntityAsync<CartItem>(x => x.Id == cartItemId);
+                if (cartItem == null) throw new Exception("CartItem Not Found");
+                if (qty <= 0) return await RemoveFromCart(cartItemId);
+                cartItem.Quantity = qty;
+                var result = await command.UpdateAsync(cartItem);
+                await UpdateCart(cartItem.CartId);
+                return result;
+            }
+            catch (Exception ex) { throw new Exception(ex.Message); }
+        }
+
         public async Task<List<VoucherUserDTO>> GetUserVoucher(string userId)
             => await repos.GetUserVoucher(userId);
 
         public async Task<int> ApplyVoucher(string userId, int voucherId)
         {
+            var transaction = await command.BeginTransactionAsync();
             try
             {
                 var voucher = await query.GetEntityAsync<Voucher>(v => v.Id == voucherId);
@@ -232,7 +306,7 @@ namespace DigiBite_Infra.Services
                 if (voucher.IsActive == false)
                     throw new Exception("Voucher is not active.");
 
-                if (voucher.MaxUsagesPerUser <= userVoucher.UsagesLeft)
+                if (userVoucher.UsagesLeft > 0)
                     throw new Exception("Voucher usage limit exceeded for this user.");
 
                 var cart = await query.GetEntityAsync<Cart>(c => c.UserId == userId && c.CartStatus == CartStatus.Active);
@@ -243,11 +317,83 @@ namespace DigiBite_Infra.Services
 
                 cart.VoucherId = voucher.Id;
                 cart.VoucherDiscount = voucher.IsPercentage ? voucher.DiscountAmount * cart.Subtotal : voucher.DiscountAmount;
-                return await command.UpdateAsync(cart);
+                var result = await command.UpdateAsync(cart);
+                await UpdateCart(cart.Id);
+                await transaction.CommitAsync();
+                return result;
             }
             catch (Exception ex)
             {
-                new Exception(ex.Message);
+                await transaction.RollbackAsync();
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<int> RemoveVoucher(string userId, int voucherId)
+        {
+            var transaction = await command.BeginTransactionAsync();
+            try
+            {
+                var cart = await query.GetEntityAsync<Cart>(c => c.UserId == userId && c.CartStatus == CartStatus.Active);
+                if (cart == null) throw new Exception("Can't Remove Voucher , the cart is ordered");
+                cart.VoucherId = null;
+                cart.VoucherDiscount = 0;
+                var result = await command.UpdateAsync(cart);
+                await UpdateCart(cart.Id);
+                await transaction.CommitAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                throw new Exception(ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region Order Service
+
+        public async Task<IEnumerable<OrdersByDateDTO>> GetOrders(string userId)
+         => await repos.GetOrders(userId);
+
+        public async Task<OrderDetailsDTO> GetOrderDetails(int id)
+            => await repos.GetOrderDetails(id);
+
+        public async Task<int> Checkout(CheckoutDTO input, string userId)
+        {
+            var transaction = await command.BeginTransactionAsync();
+            try
+            {
+                var order = new Order();
+
+                var cart = await query.GetEntityAsync<Cart>(x => x.UserId == userId && x.CartStatus == CartStatus.Active && x.Subtotal > 0);
+                if (cart == null)
+                    throw new Exception("Empty Cart");
+
+                order.CartId = cart.Id;
+                order.UserAddressId = input.UserAddressId;
+                bool isParsed = Enum.TryParse<PaymentMethod>(input.PaymentMethod, out var paymentMethod);
+                if (!isParsed)
+                    throw new Exception("Payment Method not Supported");
+                order.PaymentMethod = paymentMethod;
+                order.CustomerNotes = input.CustomerNotes;
+                order.CreatedBy = userId;
+                order.PaymentStatus = PaymentStatus.Pending;
+                order.Status = OrderStatus.New;
+                var userVoucher = await query.GetEntityAsync<VoucherUser>(x => x.UserId == userId && x.VoucherId == cart.VoucherId);
+                userVoucher.UsagesLeft -= 1;
+                cart.CartStatus = CartStatus.Ordered;
+                var result = await command.AddAsync(order);
+                await command.UpdateAsync(cart);
+                await command.UpdateAsync(userVoucher);
+                await transaction.CommitAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                throw new Exception(ex.Message);
             }
         }
 

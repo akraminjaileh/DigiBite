@@ -7,7 +7,7 @@
         gif,
         jpeg,
         svg,
-        web,
+        webp,
         pdf
     }
 }

@@ -1,6 +1,5 @@
 ﻿using DigiBite_Core.Constant;
 using DigiBite_Core.DTOs.CartItem;
-using DigiBite_Core.DTOs.CartItemAddon;
 
 namespace DigiBite_Core.DTOs.Cart
 {
