@@ -202,8 +202,8 @@ namespace DigiBite_Infra.Repos
                         where uv.UserId == userId
                         join v in context.Vouchers
                              on uv.VoucherId equals v.Id
-                        where v.MaxUsagesPerUser > uv.UsagesLeft
-                              && v.ExpirationDate <= DateTime.Now
+                        where  uv.UsagesLeft > 0
+                              && v.ExpirationDate >= DateTime.Now
                               && v.IsActive == true
                         select new VoucherUserDTO
                         {

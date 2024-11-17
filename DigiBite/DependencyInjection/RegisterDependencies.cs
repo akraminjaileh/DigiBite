@@ -14,18 +14,27 @@ namespace DigiBite_Api.Configurations
 
             services.AddScoped<IItemRepos, ItemRepos>();
             services.AddScoped<IItemService, ItemService>();
+
             services.AddScoped<IMediaRepos, MediaRepos>();
             services.AddScoped<IMediaService, MediaServices>();
+
             services.AddScoped<IMealRepos, MealRepos>();
             services.AddScoped<IMealService, MealService>();
+
             services.AddScoped<ICategoryRepos, CategoryRepos>();
             services.AddScoped<ICategoryService, CategoryService>();
+
             services.AddScoped<IIngredientService, IngredientService>();
             services.AddScoped<IIngredientRepos, IngredientRepos>();
+
             services.AddScoped<IAddOnService, AddOnService>();
             services.AddScoped<IAddOnRepos, AddOnRepos>();
+
             services.AddScoped<ICustomerActionRepos, CustomerActionRepos>();
             services.AddScoped<ICustomerActionService, CustomerActionService>();
+
+            services.AddScoped<IVoucherRepos, VoucherRepos>();
+            services.AddScoped<IVoucherService, VoucherService>();
 
         }
     }
