@@ -36,6 +36,9 @@ namespace DigiBite_Api.Configurations
             services.AddScoped<IVoucherRepos, VoucherRepos>();
             services.AddScoped<IVoucherService, VoucherService>();
 
+            services.AddScoped<IAnalyticsRepos, AnalyticsRepos>();
+            services.AddScoped<IAnalyticsService, AnalyticsService>();
+
         }
     }
 }

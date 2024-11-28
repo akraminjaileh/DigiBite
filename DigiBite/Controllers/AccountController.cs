@@ -50,7 +50,7 @@ namespace DigiBite_Api.Controllers
                 {
                     Email = input.Email,
                     FirstName = input.FirstName,
-                    LastName = input.LastName,
+                    LastName = string.IsNullOrWhiteSpace(input.LastName) ? null : input.LastName,
                     PhoneNumber = input.PhoneNumber,
                     UserName = input.Email,
                 };
