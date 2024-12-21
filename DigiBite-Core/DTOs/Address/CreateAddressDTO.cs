@@ -9,7 +9,7 @@
         public string? AdditionalDirection { get; set; }
         public string? AddressLabel { get; set; }
         public bool IsPrimary { get; set; }
-        public decimal Latitude { get; set; } // Latitude coordinate
-        public decimal Longitude { get; set; } // Longitude coordinate
+        public double Latitude { get; set; } // Latitude coordinate
+        public double Longitude { get; set; } // Longitude coordinate
     }
 }

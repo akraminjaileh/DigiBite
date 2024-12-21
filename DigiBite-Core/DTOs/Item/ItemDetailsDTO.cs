@@ -1,5 +1,6 @@
 ﻿using DigiBite_Core.DTOs.AddOnContainer;
 using DigiBite_Core.DTOs.Ingredient;
+using DigiBite_Core.DTOs.Media;
 
 namespace DigiBite_Core.DTOs.Item
 {
@@ -11,7 +12,7 @@ namespace DigiBite_Core.DTOs.Item
         public decimal Price { get; set; }
         public bool? IsAvailable { get; set; }
         public bool? IsInMenu { get; set; }
-        public IEnumerable<string> ImageUrls { get; set; }
+        public IEnumerable<ImageAltTextDTO> ImageUrls { get; set; }
         public IEnumerable<IngredientsWithImageDTO> Ingredients { get; set; }
         public IEnumerable<AddOnContainerDTO> AddOnContainers { get; set; }
 

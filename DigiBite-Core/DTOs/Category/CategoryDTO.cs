@@ -1,9 +1,11 @@
-﻿namespace DigiBite_Core.DTOs.Category
+﻿using DigiBite_Core.DTOs.Media;
+
+namespace DigiBite_Core.DTOs.Category
 {
     public class CategoryDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string? ImageUrl { get; set; }
+        public ImageAltTextDTO? ImageUrl { get; set; }
     }
 }

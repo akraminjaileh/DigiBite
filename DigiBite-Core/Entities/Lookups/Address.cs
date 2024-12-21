@@ -16,8 +16,8 @@ namespace DigiBite_Core.Models.Lookups
        
 
         // Properties for Google Maps integration
-        public decimal Latitude { get; set; } // Latitude coordinate
-        public decimal Longitude { get; set; } // Longitude coordinate
+        public double Latitude { get; set; } // Latitude coordinate
+        public double Longitude { get; set; } // Longitude coordinate
 
         //Relationship
         public string UserId { get; set; }

@@ -218,7 +218,7 @@ namespace DigiBite_Api.Controllers
         /// <response code="400">Bad request.</response>
         [ProducesResponseType(typeof(ApiResponseSwagger<int>), 200)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
-        [HttpPut]
+        [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> UpdateQuantity(UpdateQuantityDTO input)
         {

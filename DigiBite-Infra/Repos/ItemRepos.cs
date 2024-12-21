@@ -2,6 +2,7 @@
 using DigiBite_Core.DTOs.AddOnContainer;
 using DigiBite_Core.DTOs.Ingredient;
 using DigiBite_Core.DTOs.Item;
+using DigiBite_Core.DTOs.Media;
 using DigiBite_Core.Extension;
 using DigiBite_Core.Helpers;
 using DigiBite_Core.IRepos;
@@ -12,7 +13,7 @@ namespace DigiBite_Infra.Repos
     public class ItemRepos(DigiBiteContext context) : IItemRepos
     {
 
-        public async Task<IEnumerable<ItemsDTO>> GetItems(
+        public async Task<PaginatedResult<ItemsDTO>> GetItems(
             int skip, int take,
             Dictionary<string, string> orderBy,
             string sortBy = null, bool isDescending = false)
@@ -43,17 +44,32 @@ namespace DigiBite_Infra.Repos
                                                QTY = itemIngred.QTY
                                            }).ToList(),
 
-                             PrimaryImageUrl = (from img in context.Medias
-                                         join imgItem in context.MediaItems
-                                         on img.Id equals imgItem.MediaId
-                                         where imgItem.ItemId == item.Id && imgItem.IsPrimary
-                                         select img.ImageUrl).FirstOrDefault(),
+                            PrimaryImageUrl = (from img in context.Medias
+                                               join imgItem in context.MediaItems
+                                               on img.Id equals imgItem.MediaId
+                                               where imgItem.ItemId == item.Id && imgItem.IsPrimary
+                                               select new ImageAltTextDTO
+                                               {
+                                                   FileName = img.FileName,
+                                                   AltText = img.AltText,
+                                                   ImageUrl = img.ImageUrl
+                                               }).FirstOrDefault(),
 
                         };
+            var totalRecords = await context.Items
+                .Where(x => x.IsActive == true)
+                .ApplyFilterAndSort(orderBy, sortBy, isDescending)
+                .CountAsync();
 
-            return await items.ToListAsync();
+            return new PaginatedResult<ItemsDTO>
+            {
+                Items = await items.ToListAsync(),
+                TotalRecords = totalRecords
+            };
 
         }
+
+
 
 
         public async Task<ItemDetailsDTO> GetItemDetails(int id)
@@ -69,13 +85,18 @@ namespace DigiBite_Infra.Repos
 
                             CategoryName = (from cat in context.Categories
                                             where cat.Id == item.CategoryId
-                                            select cat.Name).SingleOrDefault(),
+                                            select LanguageService.SelectLang(cat.Name, cat.NameEn)).SingleOrDefault(),
 
                             ImageUrls = (from img in context.Medias
                                          join imgItem in context.MediaItems
                                          on img.Id equals imgItem.MediaId
                                          where imgItem.ItemId == item.Id
-                                         select img.ImageUrl).ToList(),
+                                         select new ImageAltTextDTO
+                                         {
+                                             FileName = img.FileName,
+                                             AltText = img.AltText,
+                                             ImageUrl = img.ImageUrl,
+                                         }).ToList(),
 
                             Ingredients = (from itemIng in context.ItemIngredients
                                            join ing in context.Ingredients

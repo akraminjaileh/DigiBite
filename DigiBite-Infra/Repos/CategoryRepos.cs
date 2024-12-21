@@ -1,5 +1,6 @@
 ﻿using DigiBite_Core.Context;
 using DigiBite_Core.DTOs.Category;
+using DigiBite_Core.DTOs.Media;
 using DigiBite_Core.Helpers;
 using DigiBite_Core.IRepos;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,12 @@ namespace DigiBite_Infra.Repos
                             Name = LanguageService.SelectLang(cat.Name, cat.NameEn),
                             ImageUrl = (from img in context.Medias
                                         where img.Id == cat.ImageId
-                                        select img.ImageUrl).FirstOrDefault()
+                                        select new ImageAltTextDTO
+                                        {
+                                            FileName = img.FileName,
+                                            AltText = img.AltText,
+                                            ImageUrl = img.ImageUrl
+                                        }).FirstOrDefault()
                         };
             return await query.ToListAsync();
         }

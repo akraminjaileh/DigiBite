@@ -1,6 +1,7 @@
 ﻿using DigiBite_Core.Constant;
 using DigiBite_Core.DTOs.Item;
 using DigiBite_Core.Entities.ManyToMany;
+using DigiBite_Core.Helpers;
 using DigiBite_Core.IRepos;
 using DigiBite_Core.IServices;
 using DigiBite_Core.Models.Entities;
@@ -11,7 +12,7 @@ namespace DigiBite_Infra.Services
     public class ItemService(IItemRepos repos, ICommandRepos command, IQueryRepos query) : IItemService
     {
 
-        public async Task<IEnumerable<ItemsDTO>> GetItems(int skip, int take, Dictionary<string, string> orderBy, string sortBy = null, bool isDescending = false)
+        public async Task<PaginatedResult<ItemsDTO>> GetItems(int skip, int take, Dictionary<string, string> orderBy, string sortBy = null, bool isDescending = false)
                  => await repos.GetItems(skip, take, orderBy, sortBy, isDescending);
 
         public async Task<ItemDetailsDTO> GetItemDetails(int id)

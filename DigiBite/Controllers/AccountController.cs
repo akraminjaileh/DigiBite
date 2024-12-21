@@ -50,7 +50,7 @@ namespace DigiBite_Api.Controllers
                 {
                     Email = input.Email,
                     FirstName = input.FirstName,
-                    LastName = string.IsNullOrWhiteSpace(input.LastName) ? null : input.LastName,
+                    LastName = input.LastName,
                     PhoneNumber = input.PhoneNumber,
                     UserName = input.Email,
                 };
@@ -138,11 +138,9 @@ namespace DigiBite_Api.Controllers
                         expires: DateTime.Now.AddHours(1),
                         signingCredentials: sc
                         );
-                    var _token = new
-                    {
-                        token = new JwtSecurityTokenHandler().WriteToken(token),
-                        expiration = token.ValidTo,
-                    };
+
+                    string _token = new JwtSecurityTokenHandler().WriteToken(token);
+                   
                     return Ok(_token);
                 }
                 else if (result.IsLockedOut)
@@ -186,7 +184,8 @@ namespace DigiBite_Api.Controllers
                 return BadRequest("User not found");
 
             var token = await userManager.GeneratePasswordResetTokenAsync(user);
-            var callbackUrl = Url.Action("ResetPassword", "Account", new { token, email = user.Email }, Request.Scheme);
+            //var callbackUrl = Url.Action("ResetPassword", "Account", new { token, email = user.Email }, Request.Scheme);
+            var callbackUrl = $"{config["AngularURL"]}/auth/restPass?token={Uri.EscapeDataString(token)}&email={Uri.EscapeDataString(user.Email)}";
 
             var emailData = new EmailDTO
             {
@@ -203,8 +202,8 @@ namespace DigiBite_Api.Controllers
 
             emailSender.SendMail(emailData);
 
-            return Ok(token);
-            //return Ok("Password reset link has been sent to your email.");
+            //return Ok(token);
+            return Ok("reset link has been sent to your email.");
         }
 
 
@@ -266,8 +265,9 @@ namespace DigiBite_Api.Controllers
                 return BadRequest("Email is already confirmed");
 
             var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-            var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account",
-                                    new { userId = user.Id, token }, Request.Scheme);
+
+            var callbackUrl = $"{config["AngularURL"]}/auth/ConfirmEmail?userId={Uri.EscapeDataString(user.Id)}&token={Uri.EscapeDataString(token)}";
+
 
             var emailData = new EmailDTO
             {

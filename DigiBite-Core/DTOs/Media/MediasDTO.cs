@@ -1,6 +1,4 @@
-﻿using DigiBite_Core.Constant;
-
-namespace DigiBite_Core.DTOs.Media
+﻿namespace DigiBite_Core.DTOs.Media
 {
     public class MediasDTO
     {

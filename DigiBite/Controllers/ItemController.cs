@@ -18,7 +18,7 @@ namespace DigiBite_Api.Controllers
         /// </summary>
         /// <response code="200">Items retrieved successfully.</response>
         /// <response code="400">Bad request.</response>
-        [ProducesResponseType(typeof(ApiResponseSwagger<List<ItemsDTO>>), 200)]
+        [ProducesResponseType(typeof(ApiResponseSwagger<PaginatedResult<ItemsDTO>>), 200)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
         [HttpGet]
         [Route("")]

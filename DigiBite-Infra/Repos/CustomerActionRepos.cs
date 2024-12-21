@@ -4,6 +4,8 @@ using DigiBite_Core.DTOs.Address;
 using DigiBite_Core.DTOs.Cart;
 using DigiBite_Core.DTOs.CartItem;
 using DigiBite_Core.DTOs.CartItemAddon;
+using DigiBite_Core.DTOs.Item;
+using DigiBite_Core.DTOs.Media;
 using DigiBite_Core.DTOs.Order;
 using DigiBite_Core.DTOs.Voucher;
 using DigiBite_Core.Helpers;
@@ -136,7 +138,7 @@ namespace DigiBite_Infra.Repos
 
                             {
                                 Id = c.Id,
-                                CartStatus = c.CartStatus,
+                                CartStatus = c.CartStatus.ToString(),
                                 DeliveryFee = c.DeliveryFee,
                                 Discount = c.Discount,
                                 ServiceFee = c.ServiceFee,
@@ -152,13 +154,39 @@ namespace DigiBite_Infra.Repos
                                                  ItemPrice = ci.ItemPrice,
                                                  Quantity = ci.Quantity,
                                                  SpecialNotes = ci.SpecialNotes,
-                                                 ItemName = (from i in context.Items
-                                                             where i.Id == ci.ItemId
-                                                             select LanguageService.SelectLang(i.Name, i.NameEn)).FirstOrDefault()
+                                                 ItemInCart = (from i in context.Items
+                                                               where i.Id == ci.ItemId
+                                                               select new ItemInCartDTO
+                                                               {
+                                                                   Name = LanguageService.SelectLang(i.Name, i.NameEn),
+                                                                   PrimaryImageUrl = (from img in context.Medias
+                                                                                      join imgItem in context.MediaItems
+                                                                                      on img.Id equals imgItem.MediaId
+                                                                                      where imgItem.ItemId == i.Id && imgItem.IsPrimary
+                                                                                      select new ImageAltTextDTO
+                                                                                      {
+                                                                                          FileName = img.FileName,
+                                                                                          AltText = img.AltText,
+                                                                                          ImageUrl = img.ImageUrl
+                                                                                      }).FirstOrDefault(),
+                                                               }).FirstOrDefault()
                                                              ??
                                                             (from m in context.Meals
                                                              where m.Id == ci.MealId
-                                                             select LanguageService.SelectLang(m.Name, m.NameEn)).FirstOrDefault(),
+                                                             select new ItemInCartDTO
+                                                             {
+                                                                 Name = LanguageService.SelectLang(m.Name, m.NameEn),
+                                                                 PrimaryImageUrl = (from img in context.Medias
+                                                                                    join imgItem in context.MediaItems
+                                                                                    on img.Id equals imgItem.MediaId
+                                                                                    where imgItem.ItemId == m.Id && imgItem.IsPrimary
+                                                                                    select new ImageAltTextDTO
+                                                                                    {
+                                                                                        FileName = img.FileName,
+                                                                                        AltText = img.AltText,
+                                                                                        ImageUrl = img.ImageUrl
+                                                                                    }).FirstOrDefault(),
+                                                             }).FirstOrDefault(),
 
                                                  CartItemAddons = (from ca in context.CartItemAddons
                                                                    where ci.Id == ca.CartItemId
@@ -202,7 +230,7 @@ namespace DigiBite_Infra.Repos
                         where uv.UserId == userId
                         join v in context.Vouchers
                              on uv.VoucherId equals v.Id
-                        where  uv.UsagesLeft > 0
+                        where uv.UsagesLeft > 0
                               && v.ExpirationDate >= DateTime.Now
                               && v.IsActive == true
                         select new VoucherUserDTO
@@ -291,7 +319,7 @@ namespace DigiBite_Infra.Repos
             }
         }
 
-        
+
         #endregion
 
     }

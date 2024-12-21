@@ -1,12 +1,11 @@
-﻿using DigiBite_Core.Constant;
-using DigiBite_Core.DTOs.CartItem;
+﻿using DigiBite_Core.DTOs.CartItem;
 
 namespace DigiBite_Core.DTOs.Cart
 {
     public class CartDTO
     {
         public int Id { get; set; }
-        public CartStatus CartStatus { get; set; } //"Active", "Ordered"
+        public string CartStatus { get; set; } //"Active", "Ordered"
         public decimal? Subtotal { get; set; }
         public decimal? Discount { get; set; }
         public decimal? VoucherDiscount { get; set; }
