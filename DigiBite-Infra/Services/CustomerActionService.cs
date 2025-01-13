@@ -20,7 +20,8 @@ namespace DigiBite_Infra.Services
         #region Addresses Service
         public async Task<IEnumerable<AddressesDTO>> GetAddresses(string userId)
         => await repos.GetAddresses(userId);
-
+        public async Task<AddressDTO> GetDefaultAddress(string userId)
+            => await repos.GetDefaultAddress(userId);
         public async Task<AddressDTO> GetAddressById(int id, string userId)
         => await repos.GetAddressById(id, userId);
 
@@ -43,6 +44,16 @@ namespace DigiBite_Infra.Services
                     UserId = userId
                 };
 
+                if (input.IsPrimary == true)
+                {
+                    var temp = await query.GetEntitiesAsync<Address>(x => x.UserId == userId && x.IsActive == true && x.IsPrimary == true);
+                    foreach (var t in temp)
+                    {
+                        t.IsPrimary = false;
+                    }
+                    await command.UpdateRangAsync(temp);
+                }
+
                 return await command.AddAsync(address);
 
             }
@@ -52,7 +63,7 @@ namespace DigiBite_Infra.Services
             }
         }
 
-        public async Task<int> UpdateAddress(UpdateAddressDTO input, int id)
+        public async Task<int> UpdateAddress(UpdateAddressDTO input, int id, string userId)
         {
             try
             {
@@ -67,6 +78,16 @@ namespace DigiBite_Infra.Services
                 address.IsPrimary = input.IsPrimary ?? address.IsPrimary;
                 address.Latitude = input.Latitude ?? address.Latitude;
                 address.Longitude = input.Longitude ?? address.Longitude;
+
+                if (input.IsPrimary == true)
+                {
+                    var temp = await query.GetEntitiesAsync<Address>(x => x.UserId == userId && x.IsActive == true && x.IsPrimary == true);
+                    foreach (var t in temp)
+                    {
+                        t.IsPrimary = false;
+                    }
+                    await command.UpdateRangAsync(temp);
+                }
 
                 return await command.UpdateAsync(address);
 
@@ -111,7 +132,7 @@ namespace DigiBite_Infra.Services
                     Subtotal = 0,
                     TotalAmount = 0,
                     VoucherDiscount = 0,
-                    VoucherId = 0,
+                    VoucherId = null,
                 };
                 await command.AddAsync(cart);
                 return cart;
@@ -306,17 +327,17 @@ namespace DigiBite_Infra.Services
                 if (voucher.IsActive == false)
                     throw new Exception("Voucher is not active.");
 
-                if (userVoucher.UsagesLeft > 0)
+                if (userVoucher.UsagesLeft <= 0)
                     throw new Exception("Voucher usage limit exceeded for this user.");
 
                 var cart = await query.GetEntityAsync<Cart>(c => c.UserId == userId && c.CartStatus == CartStatus.Active);
                 if (cart == null) throw new Exception("Can't Apply Voucher , the cart is ordered");
 
-                if (voucher.MinimumOrderAmount < cart.Subtotal)
+                if (cart.Subtotal < voucher.MinimumOrderAmount)
                     throw new Exception($"The cart does not meet the minimum order amount '{voucher.MinimumOrderAmount}' required for this voucher.");
 
                 cart.VoucherId = voucher.Id;
-                cart.VoucherDiscount = voucher.IsPercentage ? voucher.DiscountAmount * cart.Subtotal : voucher.DiscountAmount;
+                cart.VoucherDiscount = voucher.IsPercentage ? (voucher.DiscountAmount * cart.Subtotal) / 100 : voucher.DiscountAmount;
                 var result = await command.UpdateAsync(cart);
                 await UpdateCart(cart.Id);
                 await transaction.CommitAsync();
@@ -329,7 +350,7 @@ namespace DigiBite_Infra.Services
             }
         }
 
-        public async Task<int> RemoveVoucher(string userId, int voucherId)
+        public async Task<int> RemoveVoucher(string userId)
         {
             var transaction = await command.BeginTransactionAsync();
             try
@@ -381,14 +402,16 @@ namespace DigiBite_Infra.Services
                 order.CreatedBy = userId;
                 order.PaymentStatus = PaymentStatus.Pending;
                 order.Status = OrderStatus.New;
-                var userVoucher = await query.GetEntityAsync<VoucherUser>(x => x.UserId == userId && x.VoucherId == cart.VoucherId);
-                userVoucher.UsagesLeft -= 1;
+                var userVoucher = await query.GetEntityWithNullAsync<VoucherUser>(x => x.UserId == userId && x.VoucherId == cart.VoucherId);
+                if (userVoucher != null)
+                    userVoucher.UsagesLeft -= 1;
                 cart.CartStatus = CartStatus.Ordered;
-                var result = await command.AddAsync(order);
+                await command.AddAsync(order);
                 await command.UpdateAsync(cart);
-                await command.UpdateAsync(userVoucher);
+                if (userVoucher != null)
+                    await command.UpdateAsync(userVoucher);
                 await transaction.CommitAsync();
-                return result;
+                return order.Id;
             }
             catch (Exception ex)
             {

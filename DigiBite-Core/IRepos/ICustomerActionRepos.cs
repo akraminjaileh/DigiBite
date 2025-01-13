@@ -16,6 +16,7 @@ namespace DigiBite_Core.IRepos
         Task<IEnumerable<AddressesDTO>> GetAddresses(string userId);
         Task<CartDTO> GetCartDetails(Expression<Func<Cart, bool>> predicate);
         Task<int> GetCartId(string userId);
+        Task<AddressDTO> GetDefaultAddress(string userId);
         Task<OrderDetailsDTO> GetOrderDetails(int id);
         Task<IEnumerable<OrdersByDateDTO>> GetOrders(string userId);
         Task<ItemPriceDTO> GetPrice(int id, bool isMeal);

@@ -44,6 +44,31 @@ namespace DigiBite_Api.Controllers
         }
 
         /// <summary>
+        /// Retrieve GetDefault Address.
+        /// </summary>
+        /// <response code="200">Address retrieved successfully.</response>
+        /// <response code="404">No Address found.</response>
+        /// <response code="400">Bad request.</response>
+        [ProducesResponseType(typeof(ApiResponseSwagger<AddressDTO>), 200)]
+        [ProducesResponseType(typeof(ApiResponseSwagger<string>), 404)]
+        [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
+        [HttpGet]
+        [Route("DefaultAddress")]
+        public async Task<IActionResult> GetDefaultAddress()
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var result = await service.GetDefaultAddress(userId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Retrieve Customer Address By Id.
         /// </summary>
         /// <response code="200">Address retrieved successfully.</response>
@@ -106,7 +131,8 @@ namespace DigiBite_Api.Controllers
         {
             try
             {
-                var result = await service.UpdateAddress(input, id);
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var result = await service.UpdateAddress(input, id, userId);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -294,13 +320,13 @@ namespace DigiBite_Api.Controllers
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 404)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
         [HttpDelete]
-        [Route("Voucher/{id}")]
-        public async Task<IActionResult> RemoveVoucher(int id)
+        [Route("Voucher")]
+        public async Task<IActionResult> RemoveVoucher()
         {
             try
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var result = await service.RemoveVoucher(userId, id);
+                var result = await service.RemoveVoucher(userId);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -315,7 +341,7 @@ namespace DigiBite_Api.Controllers
         /// <response code="200">Retrieve Orders successfully.</response>
         /// <response code="404">No Orders found.</response>
         /// <response code="400">Bad request.</response>
-        [ProducesResponseType(typeof(ApiResponseSwagger<OrdersDTO>), 200)]
+        [ProducesResponseType(typeof(ApiResponseSwagger<OrdersByDateDTO>), 200)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 404)]
         [ProducesResponseType(typeof(ApiResponseSwagger<string>), 400)]
         [HttpGet]

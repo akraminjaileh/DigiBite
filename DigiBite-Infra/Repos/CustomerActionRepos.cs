@@ -70,6 +70,37 @@ namespace DigiBite_Infra.Repos
             }
         }
 
+        public async Task<AddressDTO> GetDefaultAddress(string userId)
+        {
+            try
+            {
+                var query = from a in context.Addresses
+                            where a.UserId == userId && a.IsActive == true
+                            orderby a.IsPrimary descending
+                            select new AddressDTO
+                            {
+                                Id = a.Id,
+                                AddressLabel = a.AddressLabel,
+                                ApartmentNumber = a.ApartmentNumber,
+                                BuildingName = a.BuildingName,
+                                Street = a.Street,
+                                AdditionalDirection = a.AdditionalDirection,
+                                Floor = a.Floor,
+                                IsPrimary = a.IsPrimary,
+                                Latitude = a.Latitude,
+                                Longitude = a.Longitude
+
+                            };
+
+                return await query.FirstOrDefaultAsync();
+                 
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
         #region Cart Action
         public async Task<ItemPriceDTO> GetPrice(int id, bool isMeal)
         {

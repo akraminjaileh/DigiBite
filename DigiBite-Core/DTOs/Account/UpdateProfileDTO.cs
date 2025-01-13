@@ -8,6 +8,6 @@ namespace DigiBite_Core.DTOs.Account
         public string? LastName { get; set; }
         public string? PhoneNumber { get; set; }
         public Gender? Gender { get; set; }
-        public DateTime? DateOfBirth { get; set; }
+        public string? DateOfBirth { get; set; }
     }
 }

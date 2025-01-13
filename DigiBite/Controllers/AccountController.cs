@@ -140,8 +140,14 @@ namespace DigiBite_Api.Controllers
                         );
 
                     string _token = new JwtSecurityTokenHandler().WriteToken(token);
-                   
-                    return Ok(_token);
+
+                    return Ok(new TokenDTO
+                    {
+                        Token = _token,
+                        Expires = token.ValidTo.ToLocalTime(),
+                        CustomerName = user.FirstName
+
+                    });
                 }
                 else if (result.IsLockedOut)
                 {
@@ -349,11 +355,12 @@ namespace DigiBite_Api.Controllers
                 if (user == null)
                     return BadRequest("User not found.");
 
-                user.Gender = input.Gender ?? user.Gender;
+                bool isParsed = DateTime.TryParse(input.DateOfBirth, out var temp);
+                user.Gender = input.Gender;
                 user.FirstName = input.FirstName ?? user.FirstName;
                 user.LastName = input.LastName ?? user.LastName;
                 user.PhoneNumber = input.PhoneNumber ?? user.PhoneNumber;
-                user.DateOfBirth = input.DateOfBirth ?? user.DateOfBirth;
+                user.DateOfBirth = isParsed ? temp : user.DateOfBirth;
                 user.LastModifiedDateTime = DateTime.Now;
 
                 var result = await userManager.UpdateAsync(user);
@@ -429,7 +436,7 @@ namespace DigiBite_Api.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         [HttpGet]
         [Route("[Action]")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetProfile()
         {
             try
@@ -447,8 +454,8 @@ namespace DigiBite_Api.Controllers
                     PhoneNumber = user.PhoneNumber,
                     DateOfBirth = user.DateOfBirth,
                     Email = user.Email,
-                    ProfileImgUrl = user.ProfileImgId == null 
-                            ? null : await mediaService.GetFileUrlById(user.ProfileImgId??0)
+                    ProfileImgUrl = user.ProfileImgId == null
+                            ? null : await mediaService.GetFileUrlById(user.ProfileImgId ?? 0)
                 };
 
                 return Ok(userProfile);

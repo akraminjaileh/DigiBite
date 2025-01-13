@@ -25,6 +25,20 @@ namespace DigiBite_Infra.Repos
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<T> GetEntityWithNullAsync<T>(Expression<Func<T, bool>> predicate) where T : class
+        {
+
+            try
+            {
+                return await context.Set<T>().FirstOrDefaultAsync(predicate);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<List<T>> GetEntitiesAsync<T>(Expression<Func<T, bool>> predicate) where T : class
         {
 
