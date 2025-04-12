@@ -28,8 +28,9 @@ builder.Services.AddMultiScoped();
 builder.Services.AddTransient<IEmailService, EmailService>();
 
 //DbContext Config
-builder.Services.AddDbContext<DigiBiteContext>(op =>
-op.UseSqlServer(builder.Configuration.GetConnectionString("Local")));
+builder.Services.AddDbContext<DigiBiteContext>(op => op.UseSqlServer(builder.Configuration.
+GetConnectionString(builder.Environment.IsProduction() ? "Production" : "Local")
+));
 
 //CORS
 builder.Services.AddCors();
@@ -62,11 +63,11 @@ builder.Services.AddAuthorization(o =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "DigiBite V1"));
-}
+//}
 
 app.UseHttpsRedirection();
 
