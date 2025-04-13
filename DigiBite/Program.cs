@@ -29,8 +29,7 @@ builder.Services.AddTransient<IEmailService, EmailService>();
 
 //DbContext Config
 builder.Services.AddDbContext<DigiBiteContext>(op => op.UseSqlServer(builder.Configuration.
-GetConnectionString(builder.Environment.IsProduction() ? "Production" : "Local")
-));
+GetConnectionString("MSSQL")));
 
 //CORS
 builder.Services.AddCors();
